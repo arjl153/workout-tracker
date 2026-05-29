@@ -10,56 +10,56 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',system-ui,sans-serif;background:#0A0A0F;color:#F1F0EE;overscroll-behavior:none;min-height:100vh}
-:root{--bg:#0A0A0F;--surface:#12121A;--card:#1A1A26;--border:#2A2A3E;--faint:#3A3A52;--accent:#F59E0B;--blue:#60A5FA;--green:#34D399;--purple:#A78BFA;--red:#F87171;--orange:#F97316;--text:#F1F0EE;--muted:#7A7A9A}
-.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:84px}
-.top-bar{padding:16px 16px 0;position:sticky;top:0;z-index:10;background:var(--bg)}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#080810;color:#F0EFF8;overscroll-behavior:none;min-height:100vh}
+:root{--bg:#080810;--surface:#0E0E1C;--card:#121220;--card2:#181828;--border:#242440;--border2:#303050;--faint:#34344E;--accent:#F59E0B;--blue:#60A5FA;--green:#34D399;--purple:#A78BFA;--red:#F87171;--orange:#F97316;--text:#F0EFF8;--muted:#6C6C8E}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:104px}
+.top-bar{padding:16px 16px 0;position:sticky;top:0;z-index:10;background:rgba(8,8,16,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,.035)}
 .day-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none}
 .day-strip::-webkit-scrollbar{display:none}
-.day-btn{flex-shrink:0;padding:8px 12px;border-radius:12px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;min-width:52px;transition:all .2s;font-family:inherit}
-.ex-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden;transition:border-color .3s}
+.day-btn{flex-shrink:0;padding:8px 12px;border-radius:14px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;min-width:54px;transition:all .25s cubic-bezier(.4,0,.2,1);font-family:inherit}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:20px;margin-bottom:10px;overflow:hidden;transition:border-color .3s,box-shadow .3s;position:relative}
+.ex-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);pointer-events:none;z-index:1}
 .ex-head{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
-.ex-body{border-top:1px solid var(--border);padding:14px 16px}
-.set-bubble{width:36px;height:36px;border-radius:50%;border:2px solid var(--faint);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;font-family:inherit}
-.set-bubble.done{border:none;background:var(--accent);color:#000;transform:scale(1.1)}
-.accordion{background:var(--card);border-radius:14px;margin-bottom:10px;overflow:hidden}
-.accordion-head{width:100%;padding:13px 16px;background:none;border:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--text);font-family:inherit}
-.accordion-inner{border-top:1px solid var(--border);padding:10px 16px 14px}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(18,18,26,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 12px 20px;z-index:100}
-.nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;font-family:inherit}
-.add-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:199;display:none}
-.add-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-radius:20px 20px 0 0;border-top:1px solid var(--border);z-index:200;display:none;max-height:92vh;overflow-y:auto;padding-bottom:28px}
+.ex-body{border-top:1px solid var(--border);padding:14px 16px;background:rgba(0,0,0,.18)}
+.set-bubble{width:38px;height:38px;border-radius:50%;border:2px solid var(--faint);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;font-family:inherit}
+.set-bubble.done{border:none;background:var(--accent);color:#000;transform:scale(1.12);box-shadow:0 0 14px rgba(245,158,11,.45),0 2px 8px rgba(0,0,0,.2)}
+.accordion{background:var(--card);border:1px solid var(--border);border-radius:18px;margin-bottom:10px;overflow:hidden}
+.accordion-head{width:100%;padding:14px 16px;background:none;border:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--text);font-family:inherit}
+.accordion-inner{border-top:1px solid var(--border);padding:10px 16px 14px;background:rgba(0,0,0,.15)}
+.bottom-nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;background:rgba(18,18,30,.92);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--border2);border-radius:28px;display:flex;padding:7px 6px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.03)}
+.nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:20px;font-family:inherit;transition:background .2s}
+.add-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:199;display:none}
+.add-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card2);border-radius:24px 24px 0 0;border-top:1px solid var(--border2);z-index:200;display:none;max-height:92vh;overflow-y:auto;padding-bottom:28px}
 .form-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:6px;display:block}
-.form-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;-webkit-appearance:none}
-.form-input:focus{border-color:var(--accent)}
-.stepper{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;height:46px}
-.step-b{width:44px;height:100%;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.form-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.stepper{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;height:48px}
+.step-b{width:46px;height:100%;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;transition:background .15s}
 .step-b:active{background:var(--faint)}
 .step-v{flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text)}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cat-btn{padding:10px 8px;border-radius:12px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;font-family:inherit;transition:all .15s;color:var(--text)}
-.cat-btn.sel{border-color:var(--accent);background:rgba(245,158,11,.12)}
-.chevron{color:var(--muted);font-size:16px;transition:transform .2s;display:inline-block;flex-shrink:0}
+.cat-btn{padding:12px 8px;border-radius:14px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;color:var(--text)}
+.cat-btn.sel{border-color:var(--accent);background:rgba(245,158,11,.1);box-shadow:inset 0 0 0 1px rgba(245,158,11,.15)}
+.chevron{color:var(--muted);font-size:16px;transition:transform .25s cubic-bezier(.4,0,.2,1);display:inline-block;flex-shrink:0}
 .chevron.open{transform:rotate(180deg)}
 .ring-wrap{position:relative;flex-shrink:0}
 .ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.step-row{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--faint);align-items:flex-start}
+.step-row{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--faint);align-items:flex-start}
 .step-row:last-child{border-bottom:none}
-.step-num{width:18px;height:18px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.info-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.step-num{width:20px;height:20px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
 .info-row:last-child{border-bottom:none}
-/* Chat / Coach */
 @keyframes tdot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
-.tdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);animation:tdot 1.4s infinite ease-in-out}
+.tdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);animation:tdot 1.4s infinite ease-in-out}
 .tdot:nth-child(2){animation-delay:.16s}.tdot:nth-child(3){animation-delay:.32s}
-button:active{opacity:.8}
+button:active{opacity:.85}
 </style>
 </head>
 <body>
 <div class="app" id="app">
   <div class="top-bar">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div><div style="font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em">30-DAY BLUEPRINT</div><div style="font-size:22px;font-weight:800">Workout Tracker</div></div>
+      <div><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.1em">30-DAY BLUEPRINT</div><div style="font-size:24px;font-weight:800;letter-spacing:-.4px">Workout Tracker</div></div>
       <div id="dayBadge"></div>
     </div>
     <div class="day-strip" id="dayStrip"></div>
@@ -92,7 +92,7 @@ button:active{opacity:.8}
     </div>
     <div style="margin-bottom:16px"><label class="form-label" for="exNoteInput">FORM NOTE (OPTIONAL)</label><input class="form-input" id="exNoteInput" type="text" inputmode="text" autocomplete="off" placeholder="e.g. RPE 8, slow eccentric"></div>
     <div style="margin-bottom:20px"><label class="form-label" for="exYtInput">YOUTUBE SEARCH (OPTIONAL)</label><input class="form-input" id="exYtInput" type="text" inputmode="text" autocomplete="off" placeholder="Leave blank to use exercise name"></div>
-    <button onclick="submitNewEx()" style="width:100%;padding:15px;border-radius:14px;border:none;background:var(--accent);color:#000;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">+ Add to Workout</button>
+    <button onclick="submitNewEx()" style="width:100%;padding:15px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--accent),var(--orange));color:#000;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 4px 18px rgba(245,158,11,.3)">+ Add to Workout</button>
   </div>
 </div>
 
@@ -337,31 +337,32 @@ function renderWorkout(){
   const day=DAYS[selectedDay],meta=TYPE[day.type],dp=progressData[day.id]||{};
   const{done,total,pct}=getDayProg(day.id),calDone=getCalBurned(day.id),calMax=getMaxCal(day.id);
   const allEx=[...day.exercises,...(customExercises[day.id]||[])];
-  let h=`<div style="background:${meta.color}18;border:1px solid ${meta.color}44;border-radius:20px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
-    <div class="ring-wrap">${ring(pct,62,5,meta.color)}<div class="ring-pct" style="font-size:12px;font-weight:800;color:${meta.color}">${pct}%</div></div>
+  let h=`<div style="background:linear-gradient(135deg,${meta.color}18,${meta.color}08);border:1px solid ${meta.color}40;border-radius:22px;padding:18px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-24px;right:-24px;width:110px;height:110px;border-radius:50%;background:${meta.color}0A;pointer-events:none"></div>
+    <div class="ring-wrap">${ring(pct,64,5,meta.color)}<div class="ring-pct" style="font-size:12px;font-weight:800;color:${meta.color}">${pct}%</div></div>
     <div style="flex:1;min-width:0">
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span>${meta.emoji}</span><span style="font-size:17px;font-weight:800">${day.label}</span>${pct===100?"<span>🎉</span>":""}</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span>${meta.emoji}</span><span style="font-size:18px;font-weight:800;letter-spacing:-.2px">${day.label}</span>${pct===100?"<span>🎉</span>":""}</div>
       <div style="font-size:12px;color:var(--muted)">${day.focus}</div>
-      <div style="font-size:12px;color:${meta.color};margin-top:3px">${done}/${total} sets done</div>
+      <div style="font-size:12px;color:${meta.color};margin-top:4px;font-weight:600">${done}/${total} sets · ${pct}%</div>
     </div>
-    <div style="text-align:center;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.3);border-radius:14px;padding:10px 12px;flex-shrink:0;min-width:68px">
-      <div>🔥</div><div style="font-size:20px;font-weight:800;color:var(--orange)">${calDone}</div>
-      <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.05em">KCAL</div>
-      <div style="font-size:9px;color:var(--faint)">/ ${calMax} max</div>
+    <div style="text-align:center;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);border-radius:16px;padding:10px 12px;flex-shrink:0;min-width:68px">
+      <div style="font-size:16px">🔥</div><div style="font-size:22px;font-weight:800;color:var(--orange);line-height:1.1;margin-top:2px">${calDone}</div>
+      <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-top:2px">KCAL</div>
+      <div style="font-size:9px;color:var(--faint)">/ ${calMax}</div>
     </div>
   </div>`;
   h+=`<div class="accordion"><button class="accordion-head" onclick="togWarmup()"><div style="display:flex;gap:8px;align-items:center"><span>🔥</span><span style="font-size:13px;font-weight:700">10-min Dynamic Warm-up</span></div><span class="chevron${showWarmup?" open":""}">▾</span></button>`;
   if(showWarmup)h+=`<div class="accordion-inner">${WARMUP.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(245,158,11,.2);color:var(--accent)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
   h+="</div>";
   h+=renderExList(day.id,allEx,dp,meta.color);
-  h+=`<button onclick="openAddSheet()" style="width:100%;padding:13px;border-radius:14px;border:1.5px dashed rgba(245,158,11,.5);background:rgba(245,158,11,.06);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px">＋ Add Custom Exercise</button>`;
+  h+=`<button onclick="openAddSheet()" style="width:100%;padding:14px;border-radius:16px;border:1.5px dashed rgba(245,158,11,.4);background:rgba(245,158,11,.05);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;letter-spacing:.01em;transition:all .2s">＋ Add Custom Exercise</button>`;
   h+=`<div class="accordion"><button class="accordion-head" onclick="togCooldown()"><div style="display:flex;gap:8px;align-items:center"><span>🌙</span><span style="font-size:13px;font-weight:700">Static Cool-down</span></div><span class="chevron${showCooldown?" open":""}">▾</span></button>`;
   if(showCooldown)h+=`<div class="accordion-inner">${COOLDOWN.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(96,165,250,.2);color:var(--blue)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
   return h+"</div>";}
 
 function renderWeek(){
   const wc=getWeekCal();
-  let h=`<div style="padding:0 16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:18px;font-weight:800">Weekly Overview</h2><div style="text-align:right"><div style="font-size:10px;color:var(--muted);font-weight:600">WEEK TOTAL</div><div style="font-size:20px;font-weight:800;color:var(--orange)">🔥 ${wc} kcal</div></div></div>
+  let h=`<div style="padding:0 16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px;font-weight:800;letter-spacing:-.3px">Weekly Overview</h2><div style="text-align:right"><div style="font-size:10px;color:var(--muted);font-weight:600">WEEK TOTAL</div><div style="font-size:20px;font-weight:800;color:var(--orange)">🔥 ${wc} kcal</div></div></div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">`;
   DAYS.forEach(d=>{const m=TYPE[d.type],{pct}=getDayProg(d.id),cal=getCalBurned(d.id);const isSel=d.id===selectedDay,isTdy=d.id===todayIdx;
     h+=`<button class="day-btn" onclick="selectDay(${d.id})" style="border-color:${isSel?m.color:isTdy?m.color+"55":"var(--border)"};background:${isSel?m.color+"18":"transparent"};padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px">
@@ -370,7 +371,7 @@ function renderWeek(){
       <div style="width:100%;height:4px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div>
       <div style="font-size:9px;color:var(--muted)">${cal?"🔥"+cal:"—"}</div>
     </button>`;});
-  h+=`</div><div style="background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">CALORIE BURN BREAKDOWN</div>`;
+  h+=`</div><div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">CALORIE BURN BREAKDOWN</div>`;
   DAYS.forEach(d=>{const m=TYPE[d.type],calDone=getCalBurned(d.id),calMax=getMaxCal(d.id),pf=calMax>0?Math.round((calDone/calMax)*100):0;
     h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
@@ -385,19 +386,19 @@ function renderStats(){
   const doneDays=DAYS.filter(d=>{const a=[...d.exercises,...(customExercises[d.id]||[])];return a.length>0&&a.every(e=>(progressData[d.id]?.[e.id]?.sets||[]).filter(Boolean).length===e.sets)}).length;
   const postureSets=DAYS.reduce((s,d)=>{const dp=progressData[d.id]||{};return s+d.exercises.filter(e=>e.posture).reduce((ss,e)=>ss+((dp[e.id]?.sets||[]).filter(Boolean).length),0)},0);
   const wc=getWeekCal();
-  let h=`<div style="padding:0 16px"><h2 style="font-size:18px;font-weight:800;margin-bottom:14px">Your Progress</h2>
+  let h=`<div style="padding:0 16px"><h2 style="font-size:20px;font-weight:800;margin-bottom:16px;letter-spacing:-.3px">Your Progress</h2>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-    <div style="background:var(--card);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">💪</div><div style="font-size:24px;font-weight:800;color:var(--blue)">${totalSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">SETS DONE</div></div>
-    <div style="background:var(--card);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">✅</div><div style="font-size:24px;font-weight:800;color:var(--green)">${doneDays}/7</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">DAYS DONE</div></div>
-    <div style="background:var(--card);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">🎯</div><div style="font-size:24px;font-weight:800;color:var(--accent)">${postureSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">POSTURE SETS</div></div>
-    <div style="background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(245,158,11,.12));border:1px solid rgba(249,115,22,.35);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">🔥</div><div style="font-size:24px;font-weight:800;color:var(--orange)">${wc}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">KCAL BURNED</div></div>
+    <div style="background:linear-gradient(135deg,rgba(96,165,250,.14),var(--card));border:1px solid rgba(96,165,250,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">💪</div><div style="font-size:26px;font-weight:800;color:var(--blue)">${totalSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">SETS DONE</div></div>
+    <div style="background:linear-gradient(135deg,rgba(52,211,153,.14),var(--card));border:1px solid rgba(52,211,153,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">✅</div><div style="font-size:26px;font-weight:800;color:var(--green)">${doneDays}/7</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">DAYS DONE</div></div>
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,.14),var(--card));border:1px solid rgba(245,158,11,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">🎯</div><div style="font-size:26px;font-weight:800;color:var(--accent)">${postureSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">POSTURE SETS</div></div>
+    <div style="background:linear-gradient(135deg,rgba(249,115,22,.16),rgba(245,158,11,.08));border:1px solid rgba(249,115,22,.28);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">🔥</div><div style="font-size:26px;font-weight:800;color:var(--orange)">${wc}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">KCAL BURNED</div></div>
   </div>`;
-  h+=`<div style="background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY BREAKDOWN</div>`;
+  h+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY BREAKDOWN</div>`;
   DAYS.forEach(d=>{const m=TYPE[d.type],{pct}=getDayProg(d.id),calDone=getCalBurned(d.id),calMax=getMaxCal(d.id);
     h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
     <div style="flex:1"><div style="height:5px;border-radius:99px;background:var(--faint);overflow:hidden;margin-bottom:3px"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div><div style="font-size:10px;color:var(--muted)">${calDone?"🔥 "+calDone+" / "+calMax+" kcal":"no sets logged yet"}</div></div>
     <div style="font-size:11px;font-weight:700;color:${pct>0?m.color:"var(--faint)"};width:28px;text-align:right">${pct}%</div></div>`;});
-  h+=`</div><div style="background:var(--card);border-radius:14px;padding:14px 16px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY MACRO TARGETS</div>`;
+  h+=`</div><div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY MACRO TARGETS</div>`;
   [{l:"Calories",v:"2,600 kcal",c:"var(--accent)"},{l:"Protein",v:"140 g · 2.19 g/kg",c:"var(--blue)"},{l:"Carbs",v:"348 g",c:"var(--green)"},{l:"Fat",v:"72 g",c:"var(--purple)"}].forEach(m=>{h+=`<div class="info-row"><span style="font-size:13px;color:var(--muted)">${m.l}</span><span style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</span></div>`;});
   return h+`<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Last meal by 7:30 PM · No food 3h before sleep</div></div></div>`;}
 
@@ -405,17 +406,18 @@ function renderCoach(){
   const day=DAYS[selectedDay];
   const chips=["Form tips for today","Can't do pull-ups — what's the sub?","Pre-workout snack (no citrus)","I'm sore — should I still train?","Best APT drill for today","Quick high-protein meal idea"];
   let h=`<div style="padding:0 16px">
-    <div style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);border-radius:18px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:center">
-      <div style="font-size:32px;line-height:1;flex-shrink:0">🤖</div>
+    <div style="background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(167,139,250,.06));border:1px solid rgba(167,139,250,.28);border-radius:20px;padding:16px;margin-bottom:14px;display:flex;gap:14px;align-items:center;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-16px;right:-16px;width:80px;height:80px;border-radius:50%;background:rgba(167,139,250,.06);pointer-events:none"></div>
+      <div style="width:44px;height:44px;border-radius:14px;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🤖</div>
       <div>
-        <div style="font-size:17px;font-weight:800">AI Coach</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">Powered by Claude · Today: ${day.label}</div>
+        <div style="font-size:17px;font-weight:800;letter-spacing:-.2px">AI Coach</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">Powered by Claude · ${day.label}</div>
       </div>
     </div>
     <div style="margin-bottom:14px">
       <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:8px">QUICK ASKS</div>
       <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none">
-        ${chips.map(c=>`<button onclick="sendChat(${JSON.stringify(c)})" style="flex-shrink:0;padding:7px 13px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap">${c}</button>`).join("")}
+        ${chips.map(c=>`<button onclick="sendChat(${JSON.stringify(c)})" style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:var(--card);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s">${c}</button>`).join("")}
       </div>
     </div>`;
 
@@ -452,8 +454,8 @@ function renderCoach(){
 function render(){
   const day=DAYS[selectedDay],meta=TYPE[day.type];
   const badge=document.getElementById("dayBadge");
-  badge.style.cssText=`background:${meta.color}22;border:1px solid ${meta.color}44;border-radius:12px;padding:6px 12px;text-align:center`;
-  badge.innerHTML=`<div style="font-size:18px">${meta.emoji}</div><div style="font-size:9px;color:${meta.color};font-weight:700;margin-top:1px">${day.day.toUpperCase()}</div>`;
+  badge.style.cssText=`background:${meta.color}18;border:1px solid ${meta.color}3A;border-radius:16px;padding:8px 14px;text-align:center`;
+  badge.innerHTML=`<div style="font-size:20px;line-height:1">${meta.emoji}</div><div style="font-size:9px;color:${meta.color};font-weight:700;margin-top:3px;letter-spacing:.06em">${day.day.toUpperCase()}</div>`;
 
   document.getElementById("dayStrip").innerHTML=DAYS.map(d=>{
     const m=TYPE[d.type],isSel=d.id===selectedDay,isTdy=d.id===todayIdx;
@@ -471,11 +473,13 @@ function render(){
   else mc.innerHTML=renderCoach();
 
   const tabs=[{id:"today",label:"Today",icon:"💪"},{id:"week",label:"Week",icon:"📅"},{id:"stats",label:"Stats",icon:"📊"},{id:"coach",label:"Coach",icon:"🤖"}];
-  document.getElementById("bottomNav").innerHTML=tabs.map(t=>`<button class="nav-btn" onclick="setTab('${t.id}')">
-    <span style="font-size:20px">${t.icon}</span>
-    <span style="font-size:9px;font-weight:${activeTab===t.id?700:500};color:${activeTab===t.id?t.id==="coach"?"var(--purple)":"var(--accent)":"var(--muted)"};letter-spacing:.04em">${t.label}</span>
-    ${activeTab===t.id?`<div style="width:16px;height:2px;background:${t.id==="coach"?"var(--purple)":"var(--accent)"};border-radius:99px;margin-top:-2px"></div>`:""}
-  </button>`).join("");
+  document.getElementById("bottomNav").innerHTML=tabs.map(t=>{
+    const isA=activeTab===t.id,col=t.id==="coach"?"var(--purple)":"var(--accent)",bg=t.id==="coach"?"rgba(167,139,250,.13)":"rgba(245,158,11,.1)";
+    return`<button class="nav-btn" onclick="setTab('${t.id}')" style="${isA?`background:${bg}`:""}">
+      <span style="font-size:20px">${t.icon}</span>
+      <span style="font-size:9px;font-weight:${isA?700:500};color:${isA?col:"var(--muted)"};letter-spacing:.04em">${t.label}</span>
+    </button>`;
+  }).join("");
 }
 render();
 </script>
