@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0A0A0F">
+<title>30-Day Workout Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0A0A0F;color:#F1F0EE;overscroll-behavior:none;min-height:100vh}
+:root{--bg:#0A0A0F;--surface:#12121A;--card:#1A1A26;--border:#2A2A3E;--faint:#3A3A52;--accent:#F59E0B;--blue:#60A5FA;--green:#34D399;--purple:#A78BFA;--red:#F87171;--orange:#F97316;--text:#F1F0EE;--muted:#7A7A9A}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:84px}
+.top-bar{padding:16px 16px 0;position:sticky;top:0;z-index:10;background:var(--bg)}
+.day-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none}
+.day-strip::-webkit-scrollbar{display:none}
+.day-btn{flex-shrink:0;padding:8px 12px;border-radius:12px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;min-width:52px;transition:all .2s;font-family:inherit}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden;transition:border-color .3s}
+.ex-head{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.ex-body{border-top:1px solid var(--border);padding:14px 16px}
+.set-bubble{width:36px;height:36px;border-radius:50%;border:2px solid var(--faint);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;font-family:inherit}
+.set-bubble.done{border:none;background:var(--accent);color:#000;transform:scale(1.1)}
+.accordion{background:var(--card);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.accordion-head{width:100%;padding:13px 16px;background:none;border:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--text);font-family:inherit}
+.accordion-inner{border-top:1px solid var(--border);padding:10px 16px 14px}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(18,18,26,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:10px 12px 20px;z-index:100}
+.nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;font-family:inherit}
+.add-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:199;display:none}
+.add-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card);border-radius:20px 20px 0 0;border-top:1px solid var(--border);z-index:200;display:none;max-height:92vh;overflow-y:auto;padding-bottom:28px}
+.form-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:6px;display:block}
+.form-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.form-input:focus{border-color:var(--accent)}
+.stepper{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;height:46px}
+.step-b{width:44px;height:100%;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.step-b:active{background:var(--faint)}
+.step-v{flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text)}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cat-btn{padding:10px 8px;border-radius:12px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;font-family:inherit;transition:all .15s;color:var(--text)}
+.cat-btn.sel{border-color:var(--accent);background:rgba(245,158,11,.12)}
+.chevron{color:var(--muted);font-size:16px;transition:transform .2s;display:inline-block;flex-shrink:0}
+.chevron.open{transform:rotate(180deg)}
+.ring-wrap{position:relative;flex-shrink:0}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.step-row{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid var(--faint);align-items:flex-start}
+.step-row:last-child{border-bottom:none}
+.step-num{width:18px;height:18px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+/* Chat / Coach */
+@keyframes tdot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.tdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);animation:tdot 1.4s infinite ease-in-out}
+.tdot:nth-child(2){animation-delay:.16s}.tdot:nth-child(3){animation-delay:.32s}
+button:active{opacity:.8}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top-bar">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div><div style="font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em">30-DAY BLUEPRINT</div><div style="font-size:22px;font-weight:800">Workout Tracker</div></div>
+      <div id="dayBadge"></div>
+    </div>
+    <div class="day-strip" id="dayStrip"></div>
+  </div>
+  <div id="mainContent" style="padding:8px 16px 0"></div>
+  <div class="bottom-nav" id="bottomNav"></div>
+</div>
+
+<div class="add-overlay" id="addOverlay" onclick="closeAddSheet()"></div>
+<div class="add-sheet" id="addSheet">
+  <div style="display:flex;justify-content:center;padding:12px 0 6px"><div style="width:36px;height:4px;border-radius:99px;background:var(--faint)"></div></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px 16px">
+    <div style="font-size:18px;font-weight:800">Add Custom Exercise</div>
+    <button onclick="closeAddSheet()" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1">×</button>
+  </div>
+  <div style="padding:0 16px">
+    <div style="margin-bottom:16px"><label class="form-label" for="exNameInput">EXERCISE NAME *</label><input class="form-input" id="exNameInput" type="text" inputmode="text" autocomplete="off" placeholder="e.g. Cable Crunch, Box Jump"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div><div class="form-label">SETS</div><div class="stepper"><button class="step-b" onclick="adjSets(-1)">−</button><div class="step-v" id="setsVal">3</div><button class="step-b" onclick="adjSets(1)">+</button></div></div>
+      <div><div class="form-label">REPS (0=TIMED)</div><div class="stepper"><button class="step-b" onclick="adjReps(-1)">−</button><div class="step-v" id="repsVal">10</div><button class="step-b" onclick="adjReps(1)">+</button></div></div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div class="form-label">CATEGORY (CALORIE ESTIMATE)</div>
+      <div class="cat-grid">
+        <button class="cat-btn" data-cat="heavy" onclick="selCat('heavy')"><div style="font-size:18px;margin-bottom:3px">🏋️</div><div style="font-size:11px;font-weight:700">Heavy Compound</div><div style="font-size:10px;color:var(--muted)">~13 kcal/set</div></button>
+        <button class="cat-btn sel" data-cat="compound" onclick="selCat('compound')"><div style="font-size:18px;margin-bottom:3px">💪</div><div style="font-size:11px;font-weight:700">Compound</div><div style="font-size:10px;color:var(--muted)">~10 kcal/set</div></button>
+        <button class="cat-btn" data-cat="isolation" onclick="selCat('isolation')"><div style="font-size:18px;margin-bottom:3px">🦾</div><div style="font-size:11px;font-weight:700">Isolation</div><div style="font-size:10px;color:var(--muted)">~6 kcal/set</div></button>
+        <button class="cat-btn" data-cat="core" onclick="selCat('core')"><div style="font-size:18px;margin-bottom:3px">🧘</div><div style="font-size:11px;font-weight:700">Core / Mobility</div><div style="font-size:10px;color:var(--muted)">~5 kcal/set</div></button>
+      </div>
+    </div>
+    <div style="margin-bottom:16px"><label class="form-label" for="exNoteInput">FORM NOTE (OPTIONAL)</label><input class="form-input" id="exNoteInput" type="text" inputmode="text" autocomplete="off" placeholder="e.g. RPE 8, slow eccentric"></div>
+    <div style="margin-bottom:20px"><label class="form-label" for="exYtInput">YOUTUBE SEARCH (OPTIONAL)</label><input class="form-input" id="exYtInput" type="text" inputmode="text" autocomplete="off" placeholder="Leave blank to use exercise name"></div>
+    <button onclick="submitNewEx()" style="width:100%;padding:15px;border-radius:14px;border:none;background:var(--accent);color:#000;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">+ Add to Workout</button>
+  </div>
+</div>
+
+<script>
+// ─── Palette / Types ──────────────────────────────────────────────────────────
+const C={blue:"#60A5FA",purple:"#A78BFA",green:"#34D399",accent:"#F59E0B",orange:"#F97316"};
+const TYPE={push:{color:C.blue,emoji:"💪",label:"Push"},pull:{color:C.purple,emoji:"🔙",label:"Pull"},legs:{color:C.green,emoji:"🦵",label:"Legs+Core"},recovery:{color:C.accent,emoji:"🌿",label:"Recovery"}};
+const CAL_CAT={heavy:13,compound:10,isolation:6,core:5,cardio:40};
+// *** VERCEL: change this to "/api/chat" ***
+const API_URL = "/api/chat";
+function ytHref(q){return"https://www.youtube.com/results?search_query="+encodeURIComponent(q+" form tutorial")}
+
+const DAYS=[
+  {id:0,day:"Mon",label:"Push A",type:"push",focus:"Chest Dominant",exercises:[
+    {id:"pa1",name:"Barbell Bench Press",sets:4,reps:8,cal:13,note:"RPE 7–8, control the descent",yt:"barbell bench press form",posture:false},
+    {id:"pa2",name:"Incline DB Press",sets:3,reps:11,cal:10,note:"Full ROM, feel the stretch at bottom",yt:"incline dumbbell press form",posture:false},
+    {id:"pa3",name:"Cable Chest Fly",sets:3,reps:13,cal:6,note:"Slow eccentric, full ROM",yt:"cable chest fly form",posture:false},
+    {id:"pa4",name:"Seated DB Overhead Press",sets:3,reps:10,cal:9,note:"",yt:"seated dumbbell overhead press form",posture:false},
+    {id:"pa5",name:"Lateral Raises",sets:3,reps:15,cal:5,note:"Slow eccentric, 3 sec down",yt:"lateral raises hypertrophy tutorial",posture:false},
+    {id:"pa6",name:"Rope Tricep Pushdown",sets:3,reps:12,cal:5,note:"",yt:"rope tricep pushdown form",posture:false},
+    {id:"pa7",name:"★ Band Pull-Apart",sets:3,reps:20,cal:4,note:"Scapular retraction — posture priority",yt:"band pull apart exercise tutorial",posture:true},
+    {id:"pa8",name:"★ Face Pull (Cable)",sets:3,reps:15,cal:4,note:"Lower trap activation",yt:"cable face pull form tutorial",posture:true}
+  ]},
+  {id:1,day:"Tue",label:"Pull A",type:"pull",focus:"Row & Posture",exercises:[
+    {id:"pua1",name:"Barbell Bent-Over Row",sets:4,reps:9,cal:12,note:"Chest tall throughout",yt:"barbell bent over row form",posture:false},
+    {id:"pua2",name:"Seated Cable Row",sets:3,reps:11,cal:9,note:"Full scapular retraction at peak",yt:"seated cable row form",posture:false},
+    {id:"pua3",name:"Single-Arm DB Row",sets:3,reps:10,cal:9,note:"Per side",yt:"single arm dumbbell row form",posture:false},
+    {id:"pua4",name:"Lat Pulldown",sets:3,reps:11,cal:8,note:"",yt:"lat pulldown form tutorial",posture:false},
+    {id:"pua5",name:"★★ Face Pull (Priority)",sets:4,reps:15,cal:4,note:"Lower/mid trap — every pull day",yt:"cable face pull lower trap tutorial",posture:true},
+    {id:"pua6",name:"★ Prone Y-T-W Raises",sets:3,reps:10,cal:3,note:"Each position, no weight",yt:"prone YTW exercise scapular",posture:true},
+    {id:"pua7",name:"Rear Delt Fly (Machine)",sets:3,reps:15,cal:5,note:"",yt:"rear delt fly machine form",posture:false},
+    {id:"pua8",name:"Hammer Curls",sets:3,reps:12,cal:5,note:"",yt:"hammer curl form tutorial",posture:false}
+  ]},
+  {id:2,day:"Wed",label:"Legs A",type:"legs",focus:"Quad & Glute + Core",exercises:[
+    {id:"la1",name:"Barbell Back Squat",sets:4,reps:8,cal:15,note:"Full depth, heels elevated if needed",yt:"barbell squat full depth form",posture:false},
+    {id:"la2",name:"Romanian Deadlift",sets:4,reps:10,cal:12,note:"Hip hinge, flat back — no rounding",yt:"romanian deadlift form tutorial",posture:false},
+    {id:"la3",name:"Leg Press",sets:3,reps:12,cal:10,note:"High foot placement for glute emphasis",yt:"leg press form glutes tutorial",posture:false},
+    {id:"la4",name:"Bulgarian Split Squat",sets:3,reps:10,cal:12,note:"Per leg, rear foot elevated",yt:"bulgarian split squat form tutorial",posture:false},
+    {id:"la5",name:"Lying Leg Curl",sets:3,reps:12,cal:6,note:"",yt:"lying leg curl hamstrings form",posture:false},
+    {id:"la6",name:"Standing Calf Raise",sets:4,reps:15,cal:5,note:"",yt:"standing calf raise form",posture:false},
+    {id:"la7",name:"♦ Dead Bug",sets:3,reps:10,cal:4,note:"TA activation — exhale fully to flatten back",yt:"dead bug exercise transverse abdominis",posture:true},
+    {id:"la8",name:"♦ Bird Dog",sets:3,reps:10,cal:4,note:"Per side, slow and controlled",yt:"bird dog exercise form tutorial",posture:true},
+    {id:"la9",name:"Pallof Press",sets:3,reps:12,cal:5,note:"Per side — anti-rotation core",yt:"pallof press anti rotation core",posture:false},
+    {id:"la10",name:"Plank (Hollow Body)",sets:3,reps:null,cal:5,note:"45 sec — posterior pelvic tilt cue",yt:"hollow body plank tutorial",posture:false}
+  ]},
+  {id:3,day:"Thu",label:"Push B",type:"push",focus:"Shoulder Dominant",exercises:[
+    {id:"pb1",name:"Seated DB Shoulder Press",sets:4,reps:10,cal:10,note:"",yt:"seated dumbbell shoulder press form",posture:false},
+    {id:"pb2",name:"Lateral Raises",sets:4,reps:15,cal:5,note:"4 sets — lagging muscle priority",yt:"lateral raises hypertrophy",posture:false},
+    {id:"pb3",name:"Arnold Press",sets:3,reps:12,cal:9,note:"",yt:"arnold press form tutorial",posture:false},
+    {id:"pb4",name:"Cable Crossover (Low-High)",sets:3,reps:15,cal:6,note:"Upper chest emphasis",yt:"cable crossover low to high chest",posture:false},
+    {id:"pb5",name:"OHT Tricep Extension",sets:3,reps:12,cal:6,note:"",yt:"overhead tricep extension form",posture:false},
+    {id:"pb6",name:"EZ-Bar Skull Crushers",sets:3,reps:10,cal:6,note:"",yt:"EZ bar skull crushers form",posture:false},
+    {id:"pb7",name:"★ Band Pull-Apart",sets:3,reps:20,cal:4,note:"Mandatory posture finisher",yt:"band pull apart exercise tutorial",posture:true}
+  ]},
+  {id:4,day:"Fri",label:"Pull B",type:"pull",focus:"Vertical Pull & Traps",exercises:[
+    {id:"pb81",name:"Weighted Pull-Ups",sets:4,reps:7,cal:13,note:"Or lat pulldown if needed",yt:"weighted pull ups form tutorial",posture:false},
+    {id:"pb82",name:"Wide-Grip Cable Row",sets:3,reps:10,cal:9,note:"",yt:"wide grip cable row form",posture:false},
+    {id:"pb83",name:"Straight-Arm Pulldown",sets:3,reps:12,cal:7,note:"Lat isolation",yt:"straight arm pulldown lat isolation",posture:false},
+    {id:"pb84",name:"★ Face Pull",sets:3,reps:15,cal:4,note:"Every pull day — always",yt:"cable face pull form tutorial",posture:true},
+    {id:"pb85",name:"DB Shrugs",sets:3,reps:15,cal:6,note:"2 sec pause at top",yt:"dumbbell shrugs form tutorial",posture:false},
+    {id:"pb86",name:"★ Prone Lower Trap Raise",sets:3,reps:10,cal:3,note:"Y-shape arms, no weight",yt:"prone lower trap raise tutorial",posture:true},
+    {id:"pb87",name:"Zottman Curls",sets:3,reps:10,cal:5,note:"Supination + pronation",yt:"zottman curl tutorial",posture:false}
+  ]},
+  {id:5,day:"Sat",label:"Legs B",type:"legs",focus:"Posterior Chain + Core",exercises:[
+    {id:"lb1",name:"♦ Barbell Hip Thrust",sets:4,reps:10,cal:13,note:"KEY APT fix — full hip extension, neutral pelvis",yt:"barbell hip thrust APT glute activation",posture:true},
+    {id:"lb2",name:"Romanian Deadlift (Heavy)",sets:4,reps:8,cal:13,note:"",yt:"heavy romanian deadlift form",posture:false},
+    {id:"lb3",name:"Conventional Deadlift",sets:3,reps:6,cal:15,note:"Add in Wks 3–4 intensification only",yt:"conventional deadlift form tutorial",posture:false},
+    {id:"lb4",name:"Walking Lunges",sets:3,reps:12,cal:12,note:"Per leg",yt:"walking lunges form tutorial",posture:false},
+    {id:"lb5",name:"Lying Leg Curl",sets:4,reps:10,cal:6,note:"",yt:"lying leg curl hamstrings",posture:false},
+    {id:"lb6",name:"Leg Extension",sets:3,reps:12,cal:6,note:"",yt:"leg extension machine form",posture:false},
+    {id:"lb7",name:"Ab Wheel Rollout",sets:3,reps:9,cal:7,note:"",yt:"ab wheel rollout form tutorial",posture:false},
+    {id:"lb8",name:"Copenhagen Plank",sets:3,reps:null,cal:5,note:"20 sec/side",yt:"copenhagen plank adductor",posture:false},
+    {id:"lb9",name:"Side Plank",sets:3,reps:null,cal:4,note:"30 sec/side",yt:"side plank form tutorial",posture:false},
+    {id:"lb10",name:"Landmine Rotation",sets:3,reps:10,cal:7,note:"Per side",yt:"landmine rotation core",posture:false}
+  ]},
+  {id:6,day:"Sun",label:"Recovery",type:"recovery",focus:"Mobility & Flexibility",exercises:[
+    {id:"rec1",name:"Light Walk / Yoga Flow",sets:1,reps:null,cal:20,note:"20–30 min easy movement",yt:"morning yoga flow stretching",posture:false},
+    {id:"rec2",name:"Couch Stretch",sets:2,reps:null,cal:3,note:"90 sec/side — most important APT release",yt:"couch stretch hip flexor APT release",posture:true},
+    {id:"rec3",name:"Pigeon Pose",sets:1,reps:null,cal:3,note:"90 sec/side",yt:"pigeon pose hip flexor tutorial",posture:false},
+    {id:"rec4",name:"Supine Hamstring Stretch",sets:1,reps:null,cal:2,note:"60 sec/side",yt:"supine hamstring stretch tutorial",posture:false},
+    {id:"rec5",name:"Thoracic Foam Roll",sets:1,reps:null,cal:3,note:"Segment T1–T12",yt:"thoracic foam roll tutorial",posture:true},
+    {id:"rec6",name:"World's Greatest Stretch",sets:1,reps:null,cal:2,note:"5 reps/side",yt:"world greatest stretch mobility",posture:false},
+    {id:"rec7",name:"90/90 Hip Stretch",sets:2,reps:null,cal:2,note:"60 sec/side",yt:"90 90 hip stretch mobility tutorial",posture:true}
+  ]}
+];
+
+const WARMUP=["Hip circles — 10 each direction","Leg swings (fwd/lateral) — 10/side","Arm circles + cross-body — 10 each","Thoracic rotation — 8/side","Cat-cow — 10 slow reps","World's greatest stretch — 5/side","Glute bridge activation — 15 reps","Band pull-apart — 15 reps"];
+const COOLDOWN=["Hip flexor stretch (half-kneeling) — 60s/side","Supine hamstring stretch — 60s/side","Pigeon pose — 90s/side","Doorway chest stretch — 60s","Child's pose — 60s","Foam roller thoracic extension — 60s","Supine spinal twist — 60s/side"];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+const jsDay=new Date().getDay(),todayIdx=jsDay===0?6:jsDay-1;
+let selectedDay=todayIdx,activeTab="today",openEx={},showWarmup=false,showCooldown=false;
+let newExSets=3,newExReps=10,newExCat="compound";
+// Progress + custom exercises: use localStorage on Vercel
+let progressData=JSON.parse(localStorage.getItem("wt_progress")||"{}");
+let customExercises=JSON.parse(localStorage.getItem("wt_custom")||"{}");
+// Coach
+let chatMsgs=[],chatBusy=false;
+
+function saveLS(){localStorage.setItem("wt_progress",JSON.stringify(progressData));localStorage.setItem("wt_custom",JSON.stringify(customExercises));}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function getCalBurned(dayId){const day=DAYS[dayId];if(!day)return 0;const dp=progressData[dayId]||{};return[...day.exercises,...(customExercises[dayId]||[])].reduce((s,e)=>s+((dp[e.id]?.sets||[]).filter(Boolean).length)*(e.cal||7),0)}
+function getMaxCal(dayId){const day=DAYS[dayId];if(!day)return 0;return[...day.exercises,...(customExercises[dayId]||[])].reduce((s,e)=>s+e.sets*(e.cal||7),0)}
+function getWeekCal(){return DAYS.reduce((s,d)=>s+getCalBurned(d.id),0)}
+function getDayProg(dayId){
+  const day=DAYS[dayId];if(!day)return{done:0,total:0,pct:0};
+  const allEx=[...day.exercises,...(customExercises[dayId]||[])];
+  const dp=progressData[dayId]||{};
+  const total=allEx.reduce((s,e)=>s+e.sets,0);
+  const done=allEx.reduce((s,e)=>s+((dp[e.id]?.sets||[]).filter(Boolean).length),0);
+  return{done,total,pct:total>0?Math.round((done/total)*100):0};
+}
+function ring(pct,size,stroke,color){
+  const r=(size-stroke)/2,c=2*Math.PI*r,d=(pct/100)*c;
+  return`<svg width="${size}" height="${size}" style="transform:rotate(-90deg)"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#3A3A52" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${d} ${c}" stroke-linecap="round"/></svg>`;
+}
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
+function toggleSet(dayId,exId,idx,totalSets){
+  if(!progressData[dayId])progressData[dayId]={};
+  if(!progressData[dayId][exId])progressData[dayId][exId]={sets:Array(totalSets).fill(false),weight:0};
+  const s=progressData[dayId][exId].sets;while(s.length<totalSets)s.push(false);s[idx]=!s[idx];saveLS();render();
+}
+function chgWeight(dayId,exId,d,totalSets){
+  if(!progressData[dayId])progressData[dayId]={};
+  if(!progressData[dayId][exId])progressData[dayId][exId]={sets:Array(totalSets).fill(false),weight:0};
+  progressData[dayId][exId].weight=Math.max(0,(progressData[dayId][exId].weight||0)+d);saveLS();render();
+}
+function togEx(k){openEx[k]=!openEx[k];render()}
+function togWarmup(){showWarmup=!showWarmup;render()}
+function togCooldown(){showCooldown=!showCooldown;render()}
+function selectDay(id){selectedDay=id;activeTab="today";render()}
+function setTab(t){activeTab=t;render()}
+function delCustomEx(dayId,exId){if(customExercises[dayId])customExercises[dayId]=customExercises[dayId].filter(e=>e.id!==exId);saveLS();render()}
+
+function openAddSheet(){
+  document.getElementById("addOverlay").style.display="block";document.getElementById("addSheet").style.display="block";
+  ["exNameInput","exNoteInput","exYtInput"].forEach(id=>document.getElementById(id).value="");
+  newExSets=3;newExReps=10;newExCat="compound";
+  document.getElementById("setsVal").textContent="3";document.getElementById("repsVal").textContent="10";
+  document.querySelectorAll(".cat-btn").forEach(b=>b.classList.toggle("sel",b.dataset.cat===newExCat));
+  setTimeout(()=>document.getElementById("exNameInput").focus(),150);
+}
+function closeAddSheet(){document.getElementById("addOverlay").style.display="none";document.getElementById("addSheet").style.display="none"}
+function adjSets(d){newExSets=Math.max(1,Math.min(10,newExSets+d));document.getElementById("setsVal").textContent=newExSets}
+function adjReps(d){newExReps=Math.max(0,Math.min(50,newExReps+d));document.getElementById("repsVal").textContent=newExReps||"Timed"}
+function selCat(cat){newExCat=cat;document.querySelectorAll(".cat-btn").forEach(b=>b.classList.toggle("sel",b.dataset.cat===cat))}
+function submitNewEx(){
+  const name=document.getElementById("exNameInput").value.trim();
+  if(!name){const inp=document.getElementById("exNameInput");inp.style.borderColor="var(--red)";setTimeout(()=>inp.style.borderColor="var(--border)",1500);return}
+  const note=document.getElementById("exNoteInput").value.trim(),yt=document.getElementById("exYtInput").value.trim()||name;
+  const ex={id:"cex_"+Date.now(),name,sets:newExSets,reps:newExReps||null,cal:CAL_CAT[newExCat]||7,note,yt,posture:false,isCustom:true};
+  if(!customExercises[selectedDay])customExercises[selectedDay]=[];
+  customExercises[selectedDay].push(ex);saveLS();closeAddSheet();render();
+}
+
+// ─── AI Coach ─────────────────────────────────────────────────────────────────
+async function sendChat(txt){
+  if(chatBusy||!txt.trim())return;
+  chatMsgs.push({role:"user",content:txt.trim()});
+  chatBusy=true;render();
+  const day=DAYS[selectedDay],{done,total,pct}=getDayProg(selectedDay);
+  const sys=`You are an expert personal fitness coach embedded in a workout tracking app. Keep responses to 2-3 short paragraphs. Be direct, practical, and specific.
+
+USER PROFILE:
+- 28M, 5'4" (163cm), 64kg, 13.1% body fat, 52kg lean mass
+- Goal: lean muscle hypertrophy + flexibility (30-day PPL program)
+- Health: Acid reflux — no meals after 7:30pm, avoid citrus/chocolate/mint/excess oil/fried foods. No beef.
+- Based in USA
+
+CURRENT SESSION:
+- Today: ${day.day} — ${day.label} (${day.focus})
+- Progress: ${done}/${total} sets completed (${pct}%), ~${getCalBurned(selectedDay)} kcal burned
+- Week total: ~${getWeekCal()} kcal this week
+
+NUTRITION TARGETS: 2,600 kcal/day | 140g protein | 348g carbs | 72g fat
+
+When giving form tips, use 2-3 specific cues. When giving nutrition advice, respect the acid reflux constraints. If asked about substitutions, suggest 1-2 practical gym alternatives.`;
+  try{
+    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,system:sys,messages:chatMsgs})});
+    const data=await resp.json();
+    const reply=data.content?.[0]?.text||"Couldn't get a response — try again.";
+    chatMsgs.push({role:"assistant",content:reply});
+  }catch(e){
+    chatMsgs.push({role:"assistant",content:"Connection error. Make sure your ANTHROPIC_API_KEY is set in Vercel environment variables and the /api/chat proxy is deployed."});
+  }
+  chatBusy=false;render();
+  setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}),120);
+}
+
+function sendChatInput(){const inp=document.getElementById("ci");if(inp?.value.trim()){const v=inp.value.trim();inp.value="";sendChat(v);}}
+function clearChat(){chatMsgs=[];render();}
+
+// ─── Render functions ─────────────────────────────────────────────────────────
+function renderExList(dayId,exercises,dp,color){
+  return exercises.map(ex=>{
+    const ep=dp[ex.id]||{},sets=ep.sets||[],doneSets=sets.filter(Boolean).length,done=doneSets===ex.sets,k=dayId+"-"+ex.id,open=!!openEx[k];
+    const cleanName=ex.name.replace(/★★\s?|★\s?|♦\s?/g,""),exCal=doneSets*(ex.cal||7);
+    return`<div class="ex-card" style="border-color:${done?color+"55":"var(--border)"}">
+<div class="ex-head" onclick="togEx('${k}')">
+  <div class="ring-wrap">${ring(ex.sets>0?(doneSets/ex.sets)*100:0,44,3,color)}<div class="ring-pct" style="font-size:10px;font-weight:800;color:${done?color:"var(--muted)"}">${doneSets}/${ex.sets}</div></div>
+  <div style="flex:1;min-width:0">
+    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:2px">
+      ${ex.posture?`<span style="font-size:9px;background:rgba(245,158,11,.15);color:var(--accent);padding:2px 6px;border-radius:20px;font-weight:700">POSTURE</span>`:""}
+      ${ex.isCustom?`<span style="font-size:9px;background:rgba(96,165,250,.15);color:var(--blue);padding:2px 6px;border-radius:20px;font-weight:700">CUSTOM</span>`:""}
+      <span style="font-size:15px;font-weight:600;color:${done?color:"var(--text)"};line-height:1.3">${cleanName}</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap">
+      <span>${ex.sets}×${ex.reps?ex.reps+" reps":"timed"}${ep.weight?" · "+ep.weight+"kg":""}</span>
+      ${exCal>0?`<span style="color:var(--orange)">🔥 ${exCal} kcal</span>`:""}
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+    <a href="${ytHref(ex.yt)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation()" style="width:34px;height:34px;border-radius:10px;background:#FF0000;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0">
+      <svg width="14" height="10" viewBox="0 0 14 10" fill="white"><path d="M13.7 1.56A1.76 1.76 0 0 0 12.46.31C11.37 0 7 0 7 0S2.63 0 1.54.31A1.76 1.76 0 0 0 .3 1.56 18.41 18.41 0 0 0 0 5a18.41 18.41 0 0 0 .3 3.44A1.76 1.76 0 0 0 1.54 9.7C2.63 10 7 10 7 10s4.37 0 5.46-.3a1.76 1.76 0 0 0 1.24-1.26A18.41 18.41 0 0 0 14 5a18.41 18.41 0 0 0-.3-3.44zM5.6 7.14V2.86L9.24 5z"/></svg>
+    </a>
+    ${ex.isCustom?`<button onclick="event.stopPropagation();delCustomEx(${dayId},'${ex.id}')" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.1);color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;line-height:1">×</button>`:""}
+    <span class="chevron${open?" open":""}">▾</span>
+  </div>
+</div>
+${open?`<div class="ex-body">
+  ${ex.note?`<div style="font-size:12px;color:var(--muted);background:var(--surface);padding:8px 12px;border-radius:10px;margin-bottom:12px;border-left:3px solid ${color}">${ex.note}</div>`:""}
+  <div style="font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em;font-weight:600">SETS COMPLETED</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    ${Array.from({length:ex.sets},(_,i)=>`<button class="set-bubble${!!(sets[i])?" done":""}" onclick="toggleSet(${dayId},'${ex.id}',${i},${ex.sets})" style="${!!(sets[i])?"background:"+color+";border:none;color:#000":"border-color:"+color+"44"}">${!!(sets[i])?"✓":i+1}</button>`).join("")}
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div><div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:.06em;font-weight:600">WEIGHT USED</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <button style="width:28px;height:28px;border-radius:8px;border:1px solid var(--faint);background:transparent;color:var(--muted);font-size:16px;cursor:pointer;font-family:inherit" onclick="chgWeight(${dayId},'${ex.id}',-2.5,${ex.sets})">−</button>
+        <span style="font-size:13px;color:var(--accent);min-width:44px;text-align:center;font-weight:700">${ep.weight?ep.weight+"kg":"—"}</span>
+        <button style="width:28px;height:28px;border-radius:8px;border:1px solid var(--faint);background:transparent;color:var(--muted);font-size:16px;cursor:pointer;font-family:inherit" onclick="chgWeight(${dayId},'${ex.id}',2.5,${ex.sets})">+</button>
+      </div>
+    </div>
+    ${done?`<div style="font-size:12px;color:${color};font-weight:700;background:${color}18;padding:6px 14px;border-radius:20px">✓ Done · 🔥 ${exCal} kcal</div>`:""}
+  </div>
+</div>`:""}
+</div>`;}).join("");}
+
+function renderWorkout(){
+  const day=DAYS[selectedDay],meta=TYPE[day.type],dp=progressData[day.id]||{};
+  const{done,total,pct}=getDayProg(day.id),calDone=getCalBurned(day.id),calMax=getMaxCal(day.id);
+  const allEx=[...day.exercises,...(customExercises[day.id]||[])];
+  let h=`<div style="background:${meta.color}18;border:1px solid ${meta.color}44;border-radius:20px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+    <div class="ring-wrap">${ring(pct,62,5,meta.color)}<div class="ring-pct" style="font-size:12px;font-weight:800;color:${meta.color}">${pct}%</div></div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span>${meta.emoji}</span><span style="font-size:17px;font-weight:800">${day.label}</span>${pct===100?"<span>🎉</span>":""}</div>
+      <div style="font-size:12px;color:var(--muted)">${day.focus}</div>
+      <div style="font-size:12px;color:${meta.color};margin-top:3px">${done}/${total} sets done</div>
+    </div>
+    <div style="text-align:center;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.3);border-radius:14px;padding:10px 12px;flex-shrink:0;min-width:68px">
+      <div>🔥</div><div style="font-size:20px;font-weight:800;color:var(--orange)">${calDone}</div>
+      <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.05em">KCAL</div>
+      <div style="font-size:9px;color:var(--faint)">/ ${calMax} max</div>
+    </div>
+  </div>`;
+  h+=`<div class="accordion"><button class="accordion-head" onclick="togWarmup()"><div style="display:flex;gap:8px;align-items:center"><span>🔥</span><span style="font-size:13px;font-weight:700">10-min Dynamic Warm-up</span></div><span class="chevron${showWarmup?" open":""}">▾</span></button>`;
+  if(showWarmup)h+=`<div class="accordion-inner">${WARMUP.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(245,158,11,.2);color:var(--accent)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
+  h+="</div>";
+  h+=renderExList(day.id,allEx,dp,meta.color);
+  h+=`<button onclick="openAddSheet()" style="width:100%;padding:13px;border-radius:14px;border:1.5px dashed rgba(245,158,11,.5);background:rgba(245,158,11,.06);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px">＋ Add Custom Exercise</button>`;
+  h+=`<div class="accordion"><button class="accordion-head" onclick="togCooldown()"><div style="display:flex;gap:8px;align-items:center"><span>🌙</span><span style="font-size:13px;font-weight:700">Static Cool-down</span></div><span class="chevron${showCooldown?" open":""}">▾</span></button>`;
+  if(showCooldown)h+=`<div class="accordion-inner">${COOLDOWN.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(96,165,250,.2);color:var(--blue)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
+  return h+"</div>";}
+
+function renderWeek(){
+  const wc=getWeekCal();
+  let h=`<div style="padding:0 16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:18px;font-weight:800">Weekly Overview</h2><div style="text-align:right"><div style="font-size:10px;color:var(--muted);font-weight:600">WEEK TOTAL</div><div style="font-size:20px;font-weight:800;color:var(--orange)">🔥 ${wc} kcal</div></div></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">`;
+  DAYS.forEach(d=>{const m=TYPE[d.type],{pct}=getDayProg(d.id),cal=getCalBurned(d.id);const isSel=d.id===selectedDay,isTdy=d.id===todayIdx;
+    h+=`<button class="day-btn" onclick="selectDay(${d.id})" style="border-color:${isSel?m.color:isTdy?m.color+"55":"var(--border)"};background:${isSel?m.color+"18":"transparent"};padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div style="font-size:11px;color:${isSel?m.color:"var(--muted)"};font-weight:600">${d.day}</div><div style="font-size:18px">${m.emoji}</div>
+      <div style="font-size:10px;color:${m.color};font-weight:700">${d.label}</div>
+      <div style="width:100%;height:4px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div>
+      <div style="font-size:9px;color:var(--muted)">${cal?"🔥"+cal:"—"}</div>
+    </button>`;});
+  h+=`</div><div style="background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">CALORIE BURN BREAKDOWN</div>`;
+  DAYS.forEach(d=>{const m=TYPE[d.type],calDone=getCalBurned(d.id),calMax=getMaxCal(d.id),pf=calMax>0?Math.round((calDone/calMax)*100):0;
+    h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
+      <div style="flex:1;height:8px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pf}%;background:linear-gradient(90deg,${m.color},var(--orange));border-radius:99px;transition:width .6s"></div></div>
+      <div style="font-size:11px;font-weight:600;min-width:60px;text-align:right;color:${calDone?"var(--orange)":"var(--faint)"}">${calDone?"🔥 "+calDone:"0 kcal"}</div>
+    </div>`;});
+  return h+`</div></div>`;
+}
+
+function renderStats(){
+  const totalSets=DAYS.reduce((s,d)=>{const dp=progressData[d.id]||{};return s+[...d.exercises,...(customExercises[d.id]||[])].reduce((ss,e)=>ss+((dp[e.id]?.sets||[]).filter(Boolean).length),0)},0);
+  const doneDays=DAYS.filter(d=>{const a=[...d.exercises,...(customExercises[d.id]||[])];return a.length>0&&a.every(e=>(progressData[d.id]?.[e.id]?.sets||[]).filter(Boolean).length===e.sets)}).length;
+  const postureSets=DAYS.reduce((s,d)=>{const dp=progressData[d.id]||{};return s+d.exercises.filter(e=>e.posture).reduce((ss,e)=>ss+((dp[e.id]?.sets||[]).filter(Boolean).length),0)},0);
+  const wc=getWeekCal();
+  let h=`<div style="padding:0 16px"><h2 style="font-size:18px;font-weight:800;margin-bottom:14px">Your Progress</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+    <div style="background:var(--card);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">💪</div><div style="font-size:24px;font-weight:800;color:var(--blue)">${totalSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">SETS DONE</div></div>
+    <div style="background:var(--card);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">✅</div><div style="font-size:24px;font-weight:800;color:var(--green)">${doneDays}/7</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">DAYS DONE</div></div>
+    <div style="background:var(--card);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">🎯</div><div style="font-size:24px;font-weight:800;color:var(--accent)">${postureSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">POSTURE SETS</div></div>
+    <div style="background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(245,158,11,.12));border:1px solid rgba(249,115,22,.35);border-radius:14px;padding:14px 12px;text-align:center"><div style="font-size:22px;margin-bottom:3px">🔥</div><div style="font-size:24px;font-weight:800;color:var(--orange)">${wc}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em">KCAL BURNED</div></div>
+  </div>`;
+  h+=`<div style="background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY BREAKDOWN</div>`;
+  DAYS.forEach(d=>{const m=TYPE[d.type],{pct}=getDayProg(d.id),calDone=getCalBurned(d.id),calMax=getMaxCal(d.id);
+    h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
+    <div style="flex:1"><div style="height:5px;border-radius:99px;background:var(--faint);overflow:hidden;margin-bottom:3px"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div><div style="font-size:10px;color:var(--muted)">${calDone?"🔥 "+calDone+" / "+calMax+" kcal":"no sets logged yet"}</div></div>
+    <div style="font-size:11px;font-weight:700;color:${pct>0?m.color:"var(--faint)"};width:28px;text-align:right">${pct}%</div></div>`;});
+  h+=`</div><div style="background:var(--card);border-radius:14px;padding:14px 16px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY MACRO TARGETS</div>`;
+  [{l:"Calories",v:"2,600 kcal",c:"var(--accent)"},{l:"Protein",v:"140 g · 2.19 g/kg",c:"var(--blue)"},{l:"Carbs",v:"348 g",c:"var(--green)"},{l:"Fat",v:"72 g",c:"var(--purple)"}].forEach(m=>{h+=`<div class="info-row"><span style="font-size:13px;color:var(--muted)">${m.l}</span><span style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</span></div>`;});
+  return h+`<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Last meal by 7:30 PM · No food 3h before sleep</div></div></div>`;}
+
+function renderCoach(){
+  const day=DAYS[selectedDay];
+  const chips=["Form tips for today","Can't do pull-ups — what's the sub?","Pre-workout snack (no citrus)","I'm sore — should I still train?","Best APT drill for today","Quick high-protein meal idea"];
+  let h=`<div style="padding:0 16px">
+    <div style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);border-radius:18px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:center">
+      <div style="font-size:32px;line-height:1;flex-shrink:0">🤖</div>
+      <div>
+        <div style="font-size:17px;font-weight:800">AI Coach</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Powered by Claude · Today: ${day.label}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:8px">QUICK ASKS</div>
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none">
+        ${chips.map(c=>`<button onclick="sendChat(${JSON.stringify(c)})" style="flex-shrink:0;padding:7px 13px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap">${c}</button>`).join("")}
+      </div>
+    </div>`;
+
+  if(chatMsgs.length===0){
+    h+=`<div style="text-align:center;padding:44px 20px;color:var(--muted)"><div style="font-size:40px;margin-bottom:12px">💬</div><div style="font-size:15px;font-weight:700;color:var(--text)">Ask your AI coach anything</div><div style="font-size:12px;margin-top:8px;line-height:1.7;color:var(--muted)">Form cues · Exercise subs · Nutrition<br>Recovery · Posture · Meal ideas</div></div>`;
+  } else {
+    h+=`<div style="margin-bottom:14px">`;
+    chatMsgs.forEach(m=>{
+      const isUser=m.role==="user";
+      h+=`<div style="display:flex;${isUser?"justify-content:flex-end":"justify-content:flex-start"};margin-bottom:12px;gap:8px;align-items:flex-end">
+        ${!isUser?`<div style="width:28px;height:28px;border-radius:50%;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;margin-bottom:2px">🤖</div>`:""}
+        <div style="max-width:80%;background:${isUser?"rgba(245,158,11,.18)":"var(--card)"};border:1px solid ${isUser?"rgba(245,158,11,.3)":"var(--border)"};border-radius:${isUser?"16px 4px 16px 16px":"4px 16px 16px 16px"};padding:11px 14px;font-size:13px;color:var(--text);line-height:1.65">${m.content.replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>")}</div>
+        ${isUser?`<div style="width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;margin-bottom:2px">🏋️</div>`:""}
+      </div>`;
+    });
+    if(chatBusy){
+      h+=`<div style="display:flex;justify-content:flex-start;gap:8px;align-items:flex-end;margin-bottom:12px">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px">🤖</div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:14px 16px;display:flex;gap:5px;align-items:center">
+          <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
+        </div>
+      </div>`;
+    }
+    h+=`</div><button onclick="clearChat()" style="width:100%;padding:9px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:12px">Clear conversation</button>`;
+  }
+  h+=`<div style="display:flex;gap:8px">
+    <input id="ci" type="text" placeholder="Ask your coach..." onkeypress="if(event.key==='Enter')sendChatInput()" style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;-webkit-appearance:none" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'">
+    <button onclick="sendChatInput()" ${chatBusy?"disabled":""} style="width:46px;height:46px;border-radius:12px;border:none;background:${chatBusy?"var(--faint)":"var(--purple)"};color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;transition:background .2s">↑</button>
+  </div></div>`;
+  return h;
+}
+
+// ─── Main render ──────────────────────────────────────────────────────────────
+function render(){
+  const day=DAYS[selectedDay],meta=TYPE[day.type];
+  const badge=document.getElementById("dayBadge");
+  badge.style.cssText=`background:${meta.color}22;border:1px solid ${meta.color}44;border-radius:12px;padding:6px 12px;text-align:center`;
+  badge.innerHTML=`<div style="font-size:18px">${meta.emoji}</div><div style="font-size:9px;color:${meta.color};font-weight:700;margin-top:1px">${day.day.toUpperCase()}</div>`;
+
+  document.getElementById("dayStrip").innerHTML=DAYS.map(d=>{
+    const m=TYPE[d.type],isSel=d.id===selectedDay,isTdy=d.id===todayIdx;
+    return`<button class="day-btn" onclick="selectDay(${d.id})" style="border-color:${isSel?m.color:isTdy?m.color+"44":"var(--border)"};background:${isSel?m.color+"22":"transparent"}">
+      <div style="font-size:10px;font-weight:700;color:${isSel?m.color:isTdy?m.color:"var(--muted)"}">${d.day}</div>
+      <div style="font-size:8px;color:${isSel?m.color:"var(--faint)"};margin-top:2px;font-weight:600">${d.label}</div>
+    </button>`;}).join("");
+
+  const mc=document.getElementById("mainContent");
+  const pad=activeTab==="today"?"8px 16px 0":"8px 0 0";
+  mc.style.padding=pad;
+  if(activeTab==="today")mc.innerHTML=renderWorkout();
+  else if(activeTab==="week")mc.innerHTML=renderWeek();
+  else if(activeTab==="stats")mc.innerHTML=renderStats();
+  else mc.innerHTML=renderCoach();
+
+  const tabs=[{id:"today",label:"Today",icon:"💪"},{id:"week",label:"Week",icon:"📅"},{id:"stats",label:"Stats",icon:"📊"},{id:"coach",label:"Coach",icon:"🤖"}];
+  document.getElementById("bottomNav").innerHTML=tabs.map(t=>`<button class="nav-btn" onclick="setTab('${t.id}')">
+    <span style="font-size:20px">${t.icon}</span>
+    <span style="font-size:9px;font-weight:${activeTab===t.id?700:500};color:${activeTab===t.id?t.id==="coach"?"var(--purple)":"var(--accent)":"var(--muted)"};letter-spacing:.04em">${t.label}</span>
+    ${activeTab===t.id?`<div style="width:16px;height:2px;background:${t.id==="coach"?"var(--purple)":"var(--accent)"};border-radius:99px;margin-top:-2px"></div>`:""}
+  </button>`).join("");
+}
+render();
+</script>
+</body>
+</html>
