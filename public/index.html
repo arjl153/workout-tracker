@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0A0A0F">
+<meta name="theme-color" content="#F59E0B">
 <title>30-Day Workout Tracker</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.svg">
+<meta name="apple-mobile-web-app-title" content="Workout">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -417,7 +420,7 @@ function renderCoach(){
     <div style="margin-bottom:14px">
       <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:8px">QUICK ASKS</div>
       <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none">
-        ${chips.map(c=>`<button onclick="sendChat(${JSON.stringify(c)})" style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:var(--card);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s">${c}</button>`).join("")}
+        ${chips.map(c=>`<button data-msg="${c}" onclick="sendChat(this.dataset.msg)" style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:var(--card);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s">${c}</button>`).join("")}
       </div>
     </div>`;
 
@@ -482,6 +485,11 @@ function render(){
   }).join("");
 }
 render();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
 </script>
 </body>
 </html>
