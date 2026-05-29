@@ -273,7 +273,7 @@ NUTRITION TARGETS: 2,600 kcal/day | 140g protein | 348g carbs | 72g fat
 
 When giving form tips, use 2-3 specific cues. When giving nutrition advice, respect the acid reflux constraints. If asked about substitutions, suggest 1-2 practical gym alternatives.`;
   try{
-    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,system:sys,messages:chatMsgs})});
+    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model: "claude-haiku-4-5-20251001",max_tokens:600,system:sys,messages:chatMsgs})});
     const data=await resp.json();
     const reply=data.content?.[0]?.text||"Couldn't get a response — try again.";
     chatMsgs.push({role:"assistant",content:reply});
