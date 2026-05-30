@@ -1,4 +1,4 @@
-const CACHE = 'workout-v1';
+const CACHE = 'system-v2';
 
 self.addEventListener('install', e => {
   e.waitUntil(

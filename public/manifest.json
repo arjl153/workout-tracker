@@ -1,11 +1,11 @@
 {
-  "name": "30-Day Workout Tracker",
-  "short_name": "Workout",
-  "description": "Your personal PPL workout tracker with AI coach",
+  "name": "THE SYSTEM — Hunter Protocol",
+  "short_name": "System",
+  "description": "Solo Leveling-style workout tracker — clear gates, gain EXP, rank up from E to S, and consult The System.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#080810",
-  "theme_color": "#F59E0B",
+  "background_color": "#05060f",
+  "theme_color": "#05060f",
   "orientation": "portrait-primary",
   "icons": [
     {

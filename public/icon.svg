@@ -1,8 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#0D0D20"/>
-  <rect x="58" y="184" width="84" height="144" rx="18" fill="#F59E0B"/>
-  <rect x="142" y="220" width="52" height="72" rx="10" fill="#FBBF24"/>
-  <rect x="194" y="234" width="124" height="44" rx="10" fill="#F59E0B"/>
-  <rect x="318" y="220" width="52" height="72" rx="10" fill="#FBBF24"/>
-  <rect x="370" y="184" width="84" height="144" rx="18" fill="#F59E0B"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#0c1430"/>
+      <stop offset="100%" stop-color="#05060f"/>
+    </radialGradient>
+    <linearGradient id="cy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7fe4ff"/>
+      <stop offset="100%" stop-color="#1d8fff"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g filter="url(#glow)" fill="none" stroke="url(#cy)" stroke-linejoin="round" stroke-linecap="round">
+    <!-- System diamond window -->
+    <path d="M256 92 L420 256 L256 420 L92 256 Z" stroke-width="14" opacity=".55"/>
+    <path d="M256 150 L362 256 L256 362 L150 256 Z" stroke-width="10"/>
+    <!-- Level-up chevrons -->
+    <path d="M196 286 L256 226 L316 286" stroke-width="20"/>
+    <path d="M210 330 L256 284 L302 330" stroke-width="16" opacity=".7"/>
+  </g>
+  <!-- corner brackets -->
+  <g stroke="#2bd4ff" stroke-width="11" fill="none" stroke-linecap="round" opacity=".9">
+    <path d="M120 86 H86 V120"/>
+    <path d="M392 86 H426 V120"/>
+    <path d="M120 426 H86 V392"/>
+    <path d="M392 426 H426 V392"/>
+  </g>
 </svg>

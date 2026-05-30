@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#F59E0B">
-<title>30-Day Workout Tracker</title>
+<meta name="theme-color" content="#05060f">
+<title>THE SYSTEM — Hunter Protocol</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icon.svg">
-<meta name="apple-mobile-web-app-title" content="Workout">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-title" content="System">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',system-ui,sans-serif;background:#080810;color:#F0EFF8;overscroll-behavior:none;min-height:100vh}
-:root{--bg:#080810;--surface:#0E0E1C;--card:#121220;--card2:#181828;--border:#242440;--border2:#303050;--faint:#34344E;--accent:#F59E0B;--blue:#60A5FA;--green:#34D399;--purple:#A78BFA;--red:#F87171;--orange:#F97316;--text:#F0EFF8;--muted:#6C6C8E}
-.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:104px}
-.top-bar{padding:16px 16px 0;position:sticky;top:0;z-index:10;background:rgba(8,8,16,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,.035)}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#05060f;color:#dce8ff;overscroll-behavior:none;min-height:100vh}
+:root{--bg:#05060f;--surface:#0a0e1e;--card:#0b1024;--card2:#111733;--border:#1c2c52;--border2:#2a4480;--faint:#16203f;--accent:#2bd4ff;--blue:#38bdf8;--green:#00e5b0;--purple:#a855f7;--red:#ff4d6d;--orange:#5fd0ff;--text:#dce8ff;--muted:#5f6f9c}
+.sysfont{font-family:'Rajdhani','DM Sans',sans-serif}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:radial-gradient(120% 60% at 50% -8%,rgba(43,212,255,.10),transparent 60%),var(--bg);padding-bottom:104px;position:relative}
+.app::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:linear-gradient(rgba(43,212,255,.025) 1px,transparent 1px);background-size:100% 3px;opacity:.5}
+.top-bar{padding:16px 16px 0;position:sticky;top:0;z-index:10;background:rgba(5,6,15,.85);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(43,212,255,.12)}
 .day-strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none}
 .day-strip::-webkit-scrollbar{display:none}
 .day-btn{flex-shrink:0;padding:8px 12px;border-radius:14px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;min-width:54px;transition:all .25s cubic-bezier(.4,0,.2,1);font-family:inherit}
@@ -25,24 +27,24 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#080810;color:#F0EFF8
 .ex-head{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
 .ex-body{border-top:1px solid var(--border);padding:14px 16px;background:rgba(0,0,0,.18)}
 .set-bubble{width:38px;height:38px;border-radius:50%;border:2px solid var(--faint);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;font-family:inherit}
-.set-bubble.done{border:none;background:var(--accent);color:#000;transform:scale(1.12);box-shadow:0 0 14px rgba(245,158,11,.45),0 2px 8px rgba(0,0,0,.2)}
+.set-bubble.done{border:none;background:var(--accent);color:#021018;transform:scale(1.12);box-shadow:0 0 14px rgba(43,212,255,.55),0 0 4px rgba(43,212,255,.4),0 2px 8px rgba(0,0,0,.3)}
 .accordion{background:var(--card);border:1px solid var(--border);border-radius:18px;margin-bottom:10px;overflow:hidden}
 .accordion-head{width:100%;padding:14px 16px;background:none;border:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--text);font-family:inherit}
 .accordion-inner{border-top:1px solid var(--border);padding:10px 16px 14px;background:rgba(0,0,0,.15)}
-.bottom-nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;background:rgba(18,18,30,.92);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--border2);border-radius:28px;display:flex;padding:7px 6px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.03)}
+.bottom-nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;background:rgba(11,16,36,.92);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--border2);border-radius:28px;display:flex;padding:7px 6px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.55),0 0 24px rgba(43,212,255,.1),inset 0 0 0 1px rgba(43,212,255,.05)}
 .nav-btn{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:20px;font-family:inherit;transition:background .2s}
 .add-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:199;display:none}
 .add-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--card2);border-radius:24px 24px 0 0;border-top:1px solid var(--border2);z-index:200;display:none;max-height:92vh;overflow-y:auto;padding-bottom:28px}
 .form-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:6px;display:block}
 .form-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
-.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,212,255,.12)}
 .stepper{display:flex;align-items:center;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;height:48px}
 .step-b{width:46px;height:100%;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;transition:background .15s}
 .step-b:active{background:var(--faint)}
 .step-v{flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text)}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .cat-btn{padding:12px 8px;border-radius:14px;border:1.5px solid var(--border);background:transparent;cursor:pointer;text-align:center;font-family:inherit;transition:all .2s;color:var(--text)}
-.cat-btn.sel{border-color:var(--accent);background:rgba(245,158,11,.1);box-shadow:inset 0 0 0 1px rgba(245,158,11,.15)}
+.cat-btn.sel{border-color:var(--accent);background:rgba(43,212,255,.1);box-shadow:inset 0 0 0 1px rgba(43,212,255,.2),0 0 12px rgba(43,212,255,.15)}
 .chevron{color:var(--muted);font-size:16px;transition:transform .25s cubic-bezier(.4,0,.2,1);display:inline-block;flex-shrink:0}
 .chevron.open{transform:rotate(180deg)}
 .ring-wrap{position:relative;flex-shrink:0}
@@ -56,26 +58,55 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#080810;color:#F0EFF8
 .tdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);animation:tdot 1.4s infinite ease-in-out}
 .tdot:nth-child(2){animation-delay:.16s}.tdot:nth-child(3){animation-delay:.32s}
 button:active{opacity:.85}
+/* ─── Solo Leveling "System" UI ─────────────────────────────── */
+.ex-card{box-shadow:0 0 0 1px rgba(43,212,255,.04) inset,0 2px 14px rgba(0,0,0,.35)}
+.accordion{box-shadow:0 0 0 1px rgba(43,212,255,.04) inset}
+.sys-panel{position:relative;border:1px solid var(--border2)!important;background:linear-gradient(135deg,rgba(43,212,255,.07),rgba(43,212,255,.012))!important;box-shadow:0 0 0 1px rgba(43,212,255,.07) inset,0 0 26px rgba(43,212,255,.10)}
+.cbr{position:absolute;width:13px;height:13px;border:2px solid var(--accent);pointer-events:none;opacity:.85;filter:drop-shadow(0 0 3px rgba(43,212,255,.7));z-index:2}
+.cbr.tl{top:-1px;left:-1px;border-right:none;border-bottom:none;border-radius:7px 0 0 0}
+.cbr.tr{top:-1px;right:-1px;border-left:none;border-bottom:none;border-radius:0 7px 0 0}
+.cbr.bl{bottom:-1px;left:-1px;border-right:none;border-top:none;border-radius:0 0 0 7px}
+.cbr.br{bottom:-1px;right:-1px;border-left:none;border-top:none;border-radius:0 0 7px 0}
+.rank-badge{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;min-width:28px;height:28px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1.5px solid currentColor;box-shadow:0 0 11px -2px currentColor;letter-spacing:.02em}
+.exp-track{height:7px;border-radius:99px;background:rgba(43,212,255,.1);overflow:hidden;border:1px solid rgba(43,212,255,.18)}
+.exp-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d8fff,var(--accent));box-shadow:0 0 10px rgba(43,212,255,.6);transition:width .5s cubic-bezier(.4,0,.2,1)}
+#sysToasts{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:300;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 12px 0;pointer-events:none}
+.sys-toast{position:relative;width:100%;background:linear-gradient(135deg,rgba(11,16,36,.97),rgba(17,23,51,.97));border:1px solid var(--accent);border-radius:14px;padding:13px 16px 13px 18px;box-shadow:0 0 24px rgba(43,212,255,.35),0 8px 30px rgba(0,0,0,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);animation:toastIn .45s cubic-bezier(.2,1.25,.3,1) both;overflow:hidden}
+.sys-toast::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.sys-toast.out{animation:toastOut .4s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(-24px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-18px) scale(.96)}}
+.st-tag{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:.24em;color:var(--accent);font-weight:700;text-transform:uppercase}
+.st-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:.03em;margin-top:1px;color:var(--text)}
+.st-body{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+.sys-toast.lvl{border-color:var(--purple);box-shadow:0 0 28px rgba(168,85,247,.45),0 8px 30px rgba(0,0,0,.55)}
+.sys-toast.lvl::after{background:var(--purple);box-shadow:0 0 12px var(--purple)}
+.sys-toast.lvl .st-tag{color:var(--purple)}
+.sys-toast.lvl .cbr{border-color:var(--purple);filter:drop-shadow(0 0 3px rgba(168,85,247,.7))}
+.glitch{font-family:'Rajdhani',sans-serif}
 </style>
 </head>
 <body>
 <div class="app" id="app">
   <div class="top-bar">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.1em">30-DAY BLUEPRINT</div><div style="font-size:24px;font-weight:800;letter-spacing:-.4px">Workout Tracker</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div><div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.28em">⟦ DAILY HUNTER PROTOCOL ⟧</div><div class="sysfont" style="font-size:25px;font-weight:700;letter-spacing:.06em;text-shadow:0 0 18px rgba(43,212,255,.45)">THE SYSTEM</div></div>
       <div id="dayBadge"></div>
     </div>
+    <div id="playerHud" style="margin-bottom:12px"></div>
     <div class="day-strip" id="dayStrip"></div>
   </div>
   <div id="mainContent" style="padding:8px 16px 0"></div>
   <div class="bottom-nav" id="bottomNav"></div>
 </div>
 
+<div id="sysToasts"></div>
+
 <div class="add-overlay" id="addOverlay" onclick="closeAddSheet()"></div>
 <div class="add-sheet" id="addSheet">
   <div style="display:flex;justify-content:center;padding:12px 0 6px"><div style="width:36px;height:4px;border-radius:99px;background:var(--faint)"></div></div>
   <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px 16px">
-    <div style="font-size:18px;font-weight:800">Add Custom Exercise</div>
+    <div class="sysfont" style="font-size:19px;font-weight:700;letter-spacing:.04em">⊹ REGISTER CUSTOM QUEST</div>
     <button onclick="closeAddSheet()" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1">×</button>
   </div>
   <div style="padding:0 16px">
@@ -95,13 +126,13 @@ button:active{opacity:.85}
     </div>
     <div style="margin-bottom:16px"><label class="form-label" for="exNoteInput">FORM NOTE (OPTIONAL)</label><input class="form-input" id="exNoteInput" type="text" inputmode="text" autocomplete="off" placeholder="e.g. RPE 8, slow eccentric"></div>
     <div style="margin-bottom:20px"><label class="form-label" for="exYtInput">YOUTUBE SEARCH (OPTIONAL)</label><input class="form-input" id="exYtInput" type="text" inputmode="text" autocomplete="off" placeholder="Leave blank to use exercise name"></div>
-    <button onclick="submitNewEx()" style="width:100%;padding:15px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--accent),var(--orange));color:#000;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 4px 18px rgba(245,158,11,.3)">+ Add to Workout</button>
+    <button onclick="submitNewEx()" class="sysfont" style="width:100%;padding:15px;border-radius:16px;border:none;background:linear-gradient(135deg,#1d8fff,var(--accent));color:#021018;font-size:16px;font-weight:700;letter-spacing:.06em;cursor:pointer;box-shadow:0 4px 22px rgba(43,212,255,.4)">＋ REGISTER QUEST</button>
   </div>
 </div>
 
 <script>
 // ─── Palette / Types ──────────────────────────────────────────────────────────
-const C={blue:"#60A5FA",purple:"#A78BFA",green:"#34D399",accent:"#F59E0B",orange:"#F97316"};
+const C={blue:"#38bdf8",purple:"#a855f7",green:"#00e5b0",accent:"#2bd4ff",orange:"#5fd0ff"};
 const TYPE={push:{color:C.blue,emoji:"💪",label:"Push"},pull:{color:C.purple,emoji:"🔙",label:"Pull"},legs:{color:C.green,emoji:"🦵",label:"Legs+Core"},recovery:{color:C.accent,emoji:"🌿",label:"Recovery"}};
 const CAL_CAT={heavy:13,compound:10,isolation:6,core:5,cardio:40};
 // *** VERCEL: change this to "/api/chat" ***
@@ -195,7 +226,62 @@ let customExercises=JSON.parse(localStorage.getItem("wt_custom")||"{}");
 // Coach
 let chatMsgs=[],chatBusy=false;
 
-function saveLS(){localStorage.setItem("wt_progress",JSON.stringify(progressData));localStorage.setItem("wt_custom",JSON.stringify(customExercises));}
+// ─── Persistent Hunter progression (lifetime, never resets) ────────────────────
+const EXP_MULT=10;
+function dateStr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function fmtDate(s){const p=s.split("-").map(Number),d=new Date(p[0],p[1]-1,p[2]);return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});}
+function currentMonday(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return dateStr(d);}
+function todayStr(){return dateStr(new Date());}
+function yesterdayStr(){const d=new Date();d.setDate(d.getDate()-1);return dateStr(d);}
+function blankPlayer(){return{exp:0,totalSets:0,gates:0,posture:0,streak:0,bestStreak:0,lastTrainDate:null,weekStart:currentMonday(),credited:{},attr:{push:0,pull:0,legs:0,recovery:0},log:[]};}
+function seedFromCurrent(p){
+  let live=0;
+  DAYS.forEach(d=>{const dp=progressData[d.id]||{};let dExp=0;[...d.exercises,...(customExercises[d.id]||[])].forEach(e=>{(dp[e.id]?.sets||[]).forEach((v,i)=>{if(v){const val=(e.cal||7)*EXP_MULT;dExp+=val;p.totalSets++;if(e.posture)p.posture++;p.credited[d.id+":"+e.id+":"+i]=true;}});});p.attr[d.type]=(p.attr[d.type]||0)+dExp;live+=dExp;});
+  p.exp=live;
+  if(live>0){const t=todayStr();p.lastTrainDate=t;p.streak=1;p.bestStreak=1;p.log=[{date:t,exp:live,gates:[]}];}
+}
+let player=JSON.parse(localStorage.getItem("wt_player")||"null");
+if(!player){player=blankPlayer();seedFromCurrent(player);}
+
+function saveStats(){localStorage.setItem("wt_player",JSON.stringify(player));}
+function saveLS(){localStorage.setItem("wt_progress",JSON.stringify(progressData));localStorage.setItem("wt_custom",JSON.stringify(customExercises));saveStats();}
+
+// Weekly "gate respawn": a new week clears the checklist (logged weights kept); lifetime stats persist
+function initWeek(){
+  const wk=currentMonday();
+  if(player.weekStart!==wk){
+    Object.values(progressData).forEach(day=>Object.values(day).forEach(ex=>{if(ex&&Array.isArray(ex.sets))ex.sets=ex.sets.map(()=>false);}));
+    player.credited={};player.weekStart=wk;saveLS();
+  }
+}
+function logToday(expGain,gateLabel){
+  const t=todayStr();let e=player.log.find(l=>l.date===t);
+  if(!e){e={date:t,exp:0,gates:[]};player.log.unshift(e);if(player.log.length>90)player.log.pop();}
+  if(expGain)e.exp+=expGain;
+  if(gateLabel&&!e.gates.includes(gateLabel))e.gates.push(gateLabel);
+}
+function registerTrainingDay(expGain){
+  const t=todayStr();
+  if(player.lastTrainDate!==t){
+    player.streak=(player.lastTrainDate===yesterdayStr())?player.streak+1:1;
+    player.bestStreak=Math.max(player.bestStreak,player.streak);
+    player.lastTrainDate=t;logToday(0,null);
+    if(player.streak>1)notify("Streak Active",`🔥 ${player.streak}-DAY STREAK`,"Consecutive training days logged.");
+  }
+  logToday(expGain,null);
+}
+function awardSet(dayId,exId,idx){
+  const key=dayId+":"+exId+":"+idx;
+  if(player.credited[key])return;
+  const ex=findEx(dayId,exId);if(!ex)return;
+  const val=(ex.cal||7)*EXP_MULT;
+  player.credited[key]=true;player.exp+=val;player.totalSets++;
+  if(ex.posture)player.posture++;
+  const t=DAYS[dayId]&&DAYS[dayId].type;if(t)player.attr[t]=(player.attr[t]||0)+val;
+  registerTrainingDay(val);
+}
+function streakLive(){return(player.lastTrainDate===todayStr()||player.lastTrainDate===yesterdayStr())?player.streak:0;}
+initWeek();
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getCalBurned(dayId){const day=DAYS[dayId];if(!day)return 0;const dp=progressData[dayId]||{};return[...day.exercises,...(customExercises[dayId]||[])].reduce((s,e)=>s+((dp[e.id]?.sets||[]).filter(Boolean).length)*(e.cal||7),0)}
@@ -211,14 +297,59 @@ function getDayProg(dayId){
 }
 function ring(pct,size,stroke,color){
   const r=(size-stroke)/2,c=2*Math.PI*r,d=(pct/100)*c;
-  return`<svg width="${size}" height="${size}" style="transform:rotate(-90deg)"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#3A3A52" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${d} ${c}" stroke-linecap="round"/></svg>`;
+  return`<svg width="${size}" height="${size}" style="transform:rotate(-90deg)"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#1c2c52" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-dasharray="${d} ${c}" stroke-linecap="round"/></svg>`;
+}
+function corners(){return'<span class="cbr tl"></span><span class="cbr tr"></span><span class="cbr bl"></span><span class="cbr br"></span>';}
+function cleanName(n){return n.replace(/★★\s?|★\s?|♦\s?/g,"");}
+
+// ─── Progression: EXP · Level · Rank (Solo Leveling "System") ──────────────────
+// Level/rank read lifetime EXP (player.exp), which only ever grows; per-set EXP is calorie×10.
+const RANK_DEF=[{name:"E",color:"#8a93b3",min:1},{name:"D",color:"#00e5b0",min:4},{name:"C",color:"#38bdf8",min:8},{name:"B",color:"#2bd4ff",min:13},{name:"A",color:"#a855f7",min:19},{name:"S",color:"#ffd34d",min:26}];
+function exEXP(ex,doneSets){return Math.round((doneSets!=null?doneSets:ex.sets)*(ex.cal||7)*EXP_MULT);}
+function getTotalEXP(){return player.exp;}
+function getLevelInfo(exp){let lvl=1,rem=exp,need=400;while(rem>=need){rem-=need;lvl++;need=400+(lvl-1)*300;}return{level:lvl,curXP:Math.round(rem),needXP:need,pct:Math.round(rem/need*100)};}
+function getRank(level){let r=RANK_DEF[0];for(const x of RANK_DEF)if(level>=x.min)r=x;return r;}
+function rankIndex(name){return RANK_DEF.findIndex(x=>x.name===name);}
+function rankTitle(name){return({E:"Awakened",D:"Hunter",C:"Elite Hunter",B:"Ace Hunter",A:"National-Level",S:"Monarch"})[name]||"Hunter";}
+function gateRank(dayId){const m=getMaxCal(dayId);return m<80?"E":m<140?"D":m<190?"C":m<240?"B":"A";}
+function findEx(dayId,exId){return[...(DAYS[dayId]?.exercises||[]),...(customExercises[dayId]||[])].find(e=>e.id===exId);}
+
+// ─── System Notifications ─────────────────────────────────────────────────────
+function notify(tag,title,body,kind){
+  const wrap=document.getElementById("sysToasts");if(!wrap)return;
+  const el=document.createElement("div");
+  el.className="sys-toast"+(kind==="lvl"?" lvl":"");
+  el.innerHTML=corners()+`<div class="st-tag">▣ ${tag}</div><div class="st-title">${title}</div>`+(body?`<div class="st-body">${body}</div>`:"");
+  wrap.appendChild(el);
+  while(wrap.children.length>3)wrap.firstChild.remove();
+  setTimeout(()=>{el.classList.add("out");setTimeout(()=>el.remove(),440);},3400);
+}
+function checkProgression(beforeLvl,beforeRank){
+  const lvl=getLevelInfo(getTotalEXP()).level,rank=getRank(lvl);
+  if(lvl>beforeLvl)notify("Level Up",`LEVEL ${lvl}`,"Your power has increased.","lvl");
+  if(rankIndex(rank.name)>rankIndex(beforeRank))notify("Notice",`RISEN TO ${rank.name}-RANK`,`You are now ${rankTitle(rank.name)}.`,"lvl");
 }
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 function toggleSet(dayId,exId,idx,totalSets){
   if(!progressData[dayId])progressData[dayId]={};
   if(!progressData[dayId][exId])progressData[dayId][exId]={sets:Array(totalSets).fill(false),weight:0};
-  const s=progressData[dayId][exId].sets;while(s.length<totalSets)s.push(false);s[idx]=!s[idx];saveLS();render();
+  const s=progressData[dayId][exId].sets;while(s.length<totalSets)s.push(false);
+  const wasExDone=s.filter(Boolean).length===totalSets;
+  const wasDayDone=getDayProg(dayId).pct===100;
+  const beforeLvl=getLevelInfo(getTotalEXP()).level,beforeRank=getRank(beforeLvl).name;
+  const turningOn=!s[idx];
+  s[idx]=turningOn;
+  if(turningOn)awardSet(dayId,exId,idx);
+  saveLS();render();
+  const nowExDone=s.filter(Boolean).length===totalSets;
+  if(!wasExDone&&nowExDone){const ex=findEx(dayId,exId);notify("Quest Complete","⟦ "+(ex?cleanName(ex.name):"QUEST")+" ⟧","+"+(ex?exEXP(ex):totalSets*70)+" EXP acquired");}
+  if(!wasDayDone&&getDayProg(dayId).pct===100){
+    const gk="gate:"+dayId;
+    if(!player.credited[gk]){player.credited[gk]=true;player.gates++;logToday(0,DAYS[dayId].label);saveLS();}
+    notify("Daily Quest Cleared","⟦ GATE CLEARED ⟧","All objectives cleared. Rewards acquired.");
+  }
+  checkProgression(beforeLvl,beforeRank);
 }
 function chgWeight(dayId,exId,d,totalSets){
   if(!progressData[dayId])progressData[dayId]={};
@@ -259,7 +390,8 @@ async function sendChat(txt){
   chatMsgs.push({role:"user",content:txt.trim()});
   chatBusy=true;render();
   const day=DAYS[selectedDay],{done,total,pct}=getDayProg(selectedDay);
-  const sys=`You are an expert personal fitness coach embedded in a workout tracking app. Keep responses to 2-3 short paragraphs. Be direct, practical, and specific.
+  const _lv=getLevelInfo(getTotalEXP()),_rk=getRank(_lv.level);
+  const sys=`You are "The System" — an in-universe AI companion inspired by the Solo Leveling anime, embedded in a workout app that frames training as leveling up a Hunter. Adopt a calm, focused, slightly formal "System" persona: you may open with a short tag like "[ System ]" and refer to workouts as quests/gates, sets as objectives, and the user as "Hunter". BUT your advice must be 100% real, accurate, practical fitness/nutrition coaching — never sacrifice correctness for flavor. Keep responses to 2-3 short paragraphs. Be direct and specific.
 
 USER PROFILE:
 - 28M, 5'4" (163cm), 64kg, 13.1% body fat, 52kg lean mass
@@ -267,9 +399,11 @@ USER PROFILE:
 - Health: Acid reflux — no meals after 7:30pm, avoid citrus/chocolate/mint/excess oil/fried foods. No beef.
 - Based in USA
 
+HUNTER STATUS: Level ${_lv.level} · ${_rk.name}-Rank (${rankTitle(_rk.name)})
+
 CURRENT SESSION:
-- Today: ${day.day} — ${day.label} (${day.focus})
-- Progress: ${done}/${total} sets completed (${pct}%), ~${getCalBurned(selectedDay)} kcal burned
+- Today's Gate: ${day.day} — ${day.label} (${day.focus})
+- Progress: ${done}/${total} objectives cleared (${pct}%), ~${getCalBurned(selectedDay)} kcal burned this session
 - Week total: ~${getWeekCal()} kcal this week
 
 NUTRITION TARGETS: 2,600 kcal/day | 140g protein | 348g carbs | 72g fat
@@ -281,7 +415,7 @@ When giving form tips, use 2-3 specific cues. When giving nutrition advice, resp
     const reply=data.content?.[0]?.text||"Couldn't get a response — try again.";
     chatMsgs.push({role:"assistant",content:reply});
   }catch(e){
-    chatMsgs.push({role:"assistant",content:"Connection error. Make sure your ANTHROPIC_API_KEY is set in Vercel environment variables and the /api/chat proxy is deployed."});
+    chatMsgs.push({role:"assistant",content:"[ System ] Connection severed. Ensure your ANTHROPIC_API_KEY is set in Vercel environment variables and the /api/chat proxy is deployed, Hunter."});
   }
   chatBusy=false;render();
   setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"}),120);
@@ -294,19 +428,19 @@ function clearChat(){chatMsgs=[];render();}
 function renderExList(dayId,exercises,dp,color){
   return exercises.map(ex=>{
     const ep=dp[ex.id]||{},sets=ep.sets||[],doneSets=sets.filter(Boolean).length,done=doneSets===ex.sets,k=dayId+"-"+ex.id,open=!!openEx[k];
-    const cleanName=ex.name.replace(/★★\s?|★\s?|♦\s?/g,""),exCal=doneSets*(ex.cal||7);
+    const nm=cleanName(ex.name),exExp=exEXP(ex,doneSets);
     return`<div class="ex-card" style="border-color:${done?color+"55":"var(--border)"}">
 <div class="ex-head" onclick="togEx('${k}')">
   <div class="ring-wrap">${ring(ex.sets>0?(doneSets/ex.sets)*100:0,44,3,color)}<div class="ring-pct" style="font-size:10px;font-weight:800;color:${done?color:"var(--muted)"}">${doneSets}/${ex.sets}</div></div>
   <div style="flex:1;min-width:0">
     <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:2px">
-      ${ex.posture?`<span style="font-size:9px;background:rgba(245,158,11,.15);color:var(--accent);padding:2px 6px;border-radius:20px;font-weight:700">POSTURE</span>`:""}
-      ${ex.isCustom?`<span style="font-size:9px;background:rgba(96,165,250,.15);color:var(--blue);padding:2px 6px;border-radius:20px;font-weight:700">CUSTOM</span>`:""}
-      <span style="font-size:15px;font-weight:600;color:${done?color:"var(--text)"};line-height:1.3">${cleanName}</span>
+      ${ex.posture?`<span class="sysfont" style="font-size:9px;background:rgba(168,85,247,.18);color:var(--purple);padding:2px 7px;border-radius:20px;font-weight:700;letter-spacing:.08em">⬡ POSTURE</span>`:""}
+      ${ex.isCustom?`<span class="sysfont" style="font-size:9px;background:rgba(43,212,255,.15);color:var(--blue);padding:2px 7px;border-radius:20px;font-weight:700;letter-spacing:.08em">⊹ CUSTOM</span>`:""}
+      <span style="font-size:15px;font-weight:600;color:${done?color:"var(--text)"};line-height:1.3">${nm}</span>
     </div>
     <div style="font-size:12px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap">
       <span>${ex.sets}×${ex.reps?ex.reps+" reps":"timed"}${ep.weight?" · "+ep.weight+"kg":""}</span>
-      ${exCal>0?`<span style="color:var(--orange)">🔥 ${exCal} kcal</span>`:""}
+      ${exExp>0?`<span style="color:var(--accent)">⚡ ${exExp} EXP</span>`:""}
     </div>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
@@ -319,19 +453,19 @@ function renderExList(dayId,exercises,dp,color){
 </div>
 ${open?`<div class="ex-body">
   ${ex.note?`<div style="font-size:12px;color:var(--muted);background:var(--surface);padding:8px 12px;border-radius:10px;margin-bottom:12px;border-left:3px solid ${color}">${ex.note}</div>`:""}
-  <div style="font-size:11px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em;font-weight:600">SETS COMPLETED</div>
+  <div class="sysfont" style="font-size:11px;color:var(--accent);margin-bottom:8px;letter-spacing:.14em;font-weight:600">▸ OBJECTIVES CLEARED</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
     ${Array.from({length:ex.sets},(_,i)=>`<button class="set-bubble${!!(sets[i])?" done":""}" onclick="toggleSet(${dayId},'${ex.id}',${i},${ex.sets})" style="${!!(sets[i])?"background:"+color+";border:none;color:#000":"border-color:"+color+"44"}">${!!(sets[i])?"✓":i+1}</button>`).join("")}
   </div>
   <div style="display:flex;align-items:center;justify-content:space-between">
-    <div><div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:.06em;font-weight:600">WEIGHT USED</div>
+    <div><div class="sysfont" style="font-size:11px;color:var(--accent);margin-bottom:6px;letter-spacing:.14em;font-weight:600">▸ LOAD LOGGED</div>
       <div style="display:flex;align-items:center;gap:6px">
         <button style="width:28px;height:28px;border-radius:8px;border:1px solid var(--faint);background:transparent;color:var(--muted);font-size:16px;cursor:pointer;font-family:inherit" onclick="chgWeight(${dayId},'${ex.id}',-2.5,${ex.sets})">−</button>
         <span style="font-size:13px;color:var(--accent);min-width:44px;text-align:center;font-weight:700">${ep.weight?ep.weight+"kg":"—"}</span>
         <button style="width:28px;height:28px;border-radius:8px;border:1px solid var(--faint);background:transparent;color:var(--muted);font-size:16px;cursor:pointer;font-family:inherit" onclick="chgWeight(${dayId},'${ex.id}',2.5,${ex.sets})">+</button>
       </div>
     </div>
-    ${done?`<div style="font-size:12px;color:${color};font-weight:700;background:${color}18;padding:6px 14px;border-radius:20px">✓ Done · 🔥 ${exCal} kcal</div>`:""}
+    ${done?`<div class="sysfont" style="font-size:13px;color:${color};font-weight:700;letter-spacing:.04em;background:${color}18;padding:6px 14px;border-radius:20px">✓ QUEST COMPLETE · ⚡${exExp}</div>`:""}
   </div>
 </div>`:""}
 </div>`;}).join("");}
@@ -339,115 +473,160 @@ ${open?`<div class="ex-body">
 function renderWorkout(){
   const day=DAYS[selectedDay],meta=TYPE[day.type],dp=progressData[day.id]||{};
   const{done,total,pct}=getDayProg(day.id),calDone=getCalBurned(day.id),calMax=getMaxCal(day.id);
+  const expDone=calDone*EXP_MULT,gr=gateRank(day.id);
   const allEx=[...day.exercises,...(customExercises[day.id]||[])];
-  let h=`<div style="background:linear-gradient(135deg,${meta.color}18,${meta.color}08);border:1px solid ${meta.color}40;border-radius:22px;padding:18px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden">
-    <div style="position:absolute;top:-24px;right:-24px;width:110px;height:110px;border-radius:50%;background:${meta.color}0A;pointer-events:none"></div>
-    <div class="ring-wrap">${ring(pct,64,5,meta.color)}<div class="ring-pct" style="font-size:12px;font-weight:800;color:${meta.color}">${pct}%</div></div>
-    <div style="flex:1;min-width:0">
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span>${meta.emoji}</span><span style="font-size:18px;font-weight:800;letter-spacing:-.2px">${day.label}</span>${pct===100?"<span>🎉</span>":""}</div>
-      <div style="font-size:12px;color:var(--muted)">${day.focus}</div>
-      <div style="font-size:12px;color:${meta.color};margin-top:4px;font-weight:600">${done}/${total} sets · ${pct}%</div>
-    </div>
-    <div style="text-align:center;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);border-radius:16px;padding:10px 12px;flex-shrink:0;min-width:68px">
-      <div style="font-size:16px">🔥</div><div style="font-size:22px;font-weight:800;color:var(--orange);line-height:1.1;margin-top:2px">${calDone}</div>
-      <div style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-top:2px">KCAL</div>
-      <div style="font-size:9px;color:var(--faint)">/ ${calMax}</div>
+  let h=`<div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden">${corners()}
+    <div class="sysfont" style="font-size:10px;letter-spacing:.24em;color:var(--accent);font-weight:700;margin-bottom:10px">▣ DAILY QUEST${pct===100?` · <span style="color:var(--green)">⟦ GATE CLEARED ⟧</span>`:""}</div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="ring-wrap">${ring(pct,64,5,meta.color)}<div class="ring-pct sysfont" style="font-size:14px;font-weight:700;color:${meta.color}">${pct}%</div></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span>${meta.emoji}</span><span class="sysfont" style="font-size:19px;font-weight:700;letter-spacing:.03em">GATE: ${day.label}</span><span class="rank-badge" style="color:${TYPE[day.type]?meta.color:meta.color};font-size:11px;min-width:0;height:20px;padding:0 7px">${gr}-RANK</span></div>
+        <div style="font-size:12px;color:var(--muted)">${day.focus}</div>
+        <div class="sysfont" style="font-size:12px;color:${meta.color};margin-top:4px;font-weight:600;letter-spacing:.05em">${done}/${total} OBJECTIVES · ${pct}%</div>
+      </div>
+      <div style="text-align:center;background:rgba(43,212,255,.08);border:1px solid rgba(43,212,255,.25);border-radius:14px;padding:10px 12px;flex-shrink:0;min-width:72px;box-shadow:0 0 14px rgba(43,212,255,.1) inset">
+        <div style="font-size:15px">⚡</div><div class="sysfont" style="font-size:21px;font-weight:700;color:var(--accent);line-height:1.1;margin-top:2px">${expDone}</div>
+        <div class="sysfont" style="font-size:8px;color:var(--muted);font-weight:700;letter-spacing:.12em;margin-top:2px">EXP</div>
+        <div style="font-size:9px;color:var(--faint)">/ ${calMax*EXP_MULT}</div>
+      </div>
     </div>
   </div>`;
-  h+=`<div class="accordion"><button class="accordion-head" onclick="togWarmup()"><div style="display:flex;gap:8px;align-items:center"><span>🔥</span><span style="font-size:13px;font-weight:700">10-min Dynamic Warm-up</span></div><span class="chevron${showWarmup?" open":""}">▾</span></button>`;
-  if(showWarmup)h+=`<div class="accordion-inner">${WARMUP.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(245,158,11,.2);color:var(--accent)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
+  h+=`<div class="accordion"><button class="accordion-head" onclick="togWarmup()"><div style="display:flex;gap:8px;align-items:center"><span>⚡</span><span class="sysfont" style="font-size:14px;font-weight:700;letter-spacing:.06em">PREPARATION PHASE</span></div><span class="chevron${showWarmup?" open":""}">▾</span></button>`;
+  if(showWarmup)h+=`<div class="accordion-inner">${WARMUP.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(43,212,255,.18);color:var(--accent)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
   h+="</div>";
   h+=renderExList(day.id,allEx,dp,meta.color);
-  h+=`<button onclick="openAddSheet()" style="width:100%;padding:14px;border-radius:16px;border:1.5px dashed rgba(245,158,11,.4);background:rgba(245,158,11,.05);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;letter-spacing:.01em;transition:all .2s">＋ Add Custom Exercise</button>`;
-  h+=`<div class="accordion"><button class="accordion-head" onclick="togCooldown()"><div style="display:flex;gap:8px;align-items:center"><span>🌙</span><span style="font-size:13px;font-weight:700">Static Cool-down</span></div><span class="chevron${showCooldown?" open":""}">▾</span></button>`;
-  if(showCooldown)h+=`<div class="accordion-inner">${COOLDOWN.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(96,165,250,.2);color:var(--blue)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
+  h+=`<button onclick="openAddSheet()" class="sysfont" style="width:100%;padding:14px;border-radius:16px;border:1.5px dashed rgba(43,212,255,.4);background:rgba(43,212,255,.05);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:.08em;transition:all .2s">＋ REGISTER CUSTOM QUEST</button>`;
+  h+=`<div class="accordion"><button class="accordion-head" onclick="togCooldown()"><div style="display:flex;gap:8px;align-items:center"><span>🌙</span><span class="sysfont" style="font-size:14px;font-weight:700;letter-spacing:.06em">RECOVERY PHASE</span></div><span class="chevron${showCooldown?" open":""}">▾</span></button>`;
+  if(showCooldown)h+=`<div class="accordion-inner">${COOLDOWN.map((w,i)=>`<div class="step-row"><span class="step-num" style="background:rgba(56,189,248,.18);color:var(--blue)">${i+1}</span><span style="font-size:12px;color:var(--muted);line-height:1.5">${w}</span></div>`).join("")}</div>`;
   return h+"</div>";}
 
 function renderWeek(){
   const wc=getWeekCal();
-  let h=`<div style="padding:0 16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="font-size:20px;font-weight:800;letter-spacing:-.3px">Weekly Overview</h2><div style="text-align:right"><div style="font-size:10px;color:var(--muted);font-weight:600">WEEK TOTAL</div><div style="font-size:20px;font-weight:800;color:var(--orange)">🔥 ${wc} kcal</div></div></div>
+  let h=`<div style="padding:0 16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 class="sysfont" style="font-size:21px;font-weight:700;letter-spacing:.04em">⟦ GATES OVERVIEW ⟧</h2><div style="text-align:right"><div class="sysfont" style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.14em">WEEKLY EXP</div><div class="sysfont" style="font-size:20px;font-weight:700;color:var(--accent)">⚡ ${wc*EXP_MULT}</div></div></div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">`;
   DAYS.forEach(d=>{const m=TYPE[d.type],{pct}=getDayProg(d.id),cal=getCalBurned(d.id);const isSel=d.id===selectedDay,isTdy=d.id===todayIdx;
     h+=`<button class="day-btn" onclick="selectDay(${d.id})" style="border-color:${isSel?m.color:isTdy?m.color+"55":"var(--border)"};background:${isSel?m.color+"18":"transparent"};padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px">
       <div style="font-size:11px;color:${isSel?m.color:"var(--muted)"};font-weight:600">${d.day}</div><div style="font-size:18px">${m.emoji}</div>
       <div style="font-size:10px;color:${m.color};font-weight:700">${d.label}</div>
       <div style="width:100%;height:4px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div>
-      <div style="font-size:9px;color:var(--muted)">${cal?"🔥"+cal:"—"}</div>
+      <div style="font-size:9px;color:var(--muted)">${cal?"⚡"+cal*EXP_MULT:"—"}</div>
     </button>`;});
-  h+=`</div><div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">CALORIE BURN BREAKDOWN</div>`;
+  h+=`</div><div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:12px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:12px">▣ EXP ACQUISITION LOG</div>`;
   DAYS.forEach(d=>{const m=TYPE[d.type],calDone=getCalBurned(d.id),calMax=getMaxCal(d.id),pf=calMax>0?Math.round((calDone/calMax)*100):0;
     h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
-      <div style="flex:1;height:8px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pf}%;background:linear-gradient(90deg,${m.color},var(--orange));border-radius:99px;transition:width .6s"></div></div>
-      <div style="font-size:11px;font-weight:600;min-width:60px;text-align:right;color:${calDone?"var(--orange)":"var(--faint)"}">${calDone?"🔥 "+calDone:"0 kcal"}</div>
+      <div style="flex:1;height:8px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pf}%;background:linear-gradient(90deg,${m.color},var(--accent));border-radius:99px;transition:width .6s;box-shadow:0 0 8px rgba(43,212,255,.4)"></div></div>
+      <div class="sysfont" style="font-size:11px;font-weight:600;min-width:64px;text-align:right;color:${calDone?"var(--accent)":"var(--faint)"}">${calDone?"⚡ "+calDone*EXP_MULT:"0 EXP"}</div>
     </div>`;});
   return h+`</div></div>`;
 }
 
 function renderStats(){
-  const totalSets=DAYS.reduce((s,d)=>{const dp=progressData[d.id]||{};return s+[...d.exercises,...(customExercises[d.id]||[])].reduce((ss,e)=>ss+((dp[e.id]?.sets||[]).filter(Boolean).length),0)},0);
-  const doneDays=DAYS.filter(d=>{const a=[...d.exercises,...(customExercises[d.id]||[])];return a.length>0&&a.every(e=>(progressData[d.id]?.[e.id]?.sets||[]).filter(Boolean).length===e.sets)}).length;
-  const postureSets=DAYS.reduce((s,d)=>{const dp=progressData[d.id]||{};return s+d.exercises.filter(e=>e.posture).reduce((ss,e)=>ss+((dp[e.id]?.sets||[]).filter(Boolean).length),0)},0);
-  const wc=getWeekCal();
-  let h=`<div style="padding:0 16px"><h2 style="font-size:20px;font-weight:800;margin-bottom:16px;letter-spacing:-.3px">Your Progress</h2>
+  const lv=getLevelInfo(getTotalEXP()),rank=getRank(lv.level),A=player.attr,strk=streakLive();
+  // Lifetime attributes mapped from training categories (each grows forever)
+  const statPts=x=>Math.floor(x/50);
+  const amax=Math.max(1,A.push,A.pull,A.legs,A.recovery);
+  const attrs=[{k:"STR",src:A.push,c:"var(--blue)"},{k:"AGI",src:A.pull,c:"var(--accent)"},{k:"VIT",src:A.legs,c:"var(--green)"},{k:"SEN",src:A.recovery,c:"var(--purple)"}];
+  let h=`<div style="padding:0 16px">
+  <div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:14px;position:relative">${corners()}
+    <div class="sysfont" style="font-size:10px;letter-spacing:.26em;color:var(--accent);font-weight:700;margin-bottom:10px">▣ STATUS</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+      <div>
+        <div class="sysfont" style="font-size:11px;color:var(--muted);letter-spacing:.14em">PLAYER</div>
+        <div class="sysfont" style="font-size:22px;font-weight:700;letter-spacing:.04em;text-shadow:0 0 14px rgba(43,212,255,.35)">HUNTER</div>
+        <div class="sysfont" style="font-size:12px;color:${rank.color};font-weight:600;letter-spacing:.06em;margin-top:2px">JOB: ${rankTitle(rank.name)}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="sysfont" style="font-size:11px;color:var(--muted);letter-spacing:.14em">LEVEL</div>
+        <div class="sysfont" style="font-size:30px;font-weight:700;line-height:1;color:var(--accent);text-shadow:0 0 16px rgba(43,212,255,.5)">${lv.level}</div>
+        <div style="display:flex;justify-content:flex-end;margin-top:5px"><span class="rank-badge" style="color:${rank.color}">${rank.name}</span></div>
+      </div>
+    </div>
+    <div class="exp-track"><div class="exp-fill" style="width:${lv.pct}%"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:5px"><span class="sysfont" style="font-size:10px;color:var(--muted);letter-spacing:.1em">EXP</span><span class="sysfont" style="font-size:10px;color:var(--accent)">${lv.curXP} / ${lv.needXP}  ·  ⚡${player.exp} TOTAL</span></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <div style="flex:1;text-align:center;background:rgba(255,140,40,.08);border:1px solid rgba(255,140,40,.22);border-radius:11px;padding:7px 4px"><div class="sysfont" style="font-size:17px;font-weight:700;color:#ff9d4d">🔥 ${strk}</div><div class="sysfont" style="font-size:8px;color:var(--muted);letter-spacing:.1em;margin-top:1px">DAY STREAK</div></div>
+      <div style="flex:1;text-align:center;background:rgba(43,212,255,.07);border:1px solid rgba(43,212,255,.2);border-radius:11px;padding:7px 4px"><div class="sysfont" style="font-size:17px;font-weight:700;color:var(--accent)">${player.bestStreak}</div><div class="sysfont" style="font-size:8px;color:var(--muted);letter-spacing:.1em;margin-top:1px">BEST</div></div>
+      <div style="flex:1;text-align:center;background:rgba(0,229,176,.07);border:1px solid rgba(0,229,176,.2);border-radius:11px;padding:7px 4px"><div class="sysfont" style="font-size:17px;font-weight:700;color:var(--green)">${player.gates}</div><div class="sysfont" style="font-size:8px;color:var(--muted);letter-spacing:.1em;margin-top:1px">GATES</div></div>
+    </div>
+  </div>
+  <div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:14px;position:relative">${corners()}
+    <div class="sysfont" style="font-size:10px;letter-spacing:.2em;color:var(--accent);font-weight:700;margin-bottom:12px">▣ ATTRIBUTES</div>`;
+  attrs.forEach(a=>{const pct=Math.round(a.src/amax*100);
+    h+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+      <div class="sysfont" style="width:38px;font-size:14px;font-weight:700;color:${a.c}">${a.k}</div>
+      <div style="flex:1"><div style="height:7px;border-radius:99px;background:var(--faint);overflow:hidden"><div style="height:100%;width:${pct}%;background:${a.c};border-radius:99px;box-shadow:0 0 8px ${a.c}99;transition:width .6s"></div></div></div>
+      <div class="sysfont" style="font-size:12px;font-weight:700;color:${a.c};min-width:30px;text-align:right">${statPts(a.src)}</div>
+    </div>`;});
+  h+=`</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-    <div style="background:linear-gradient(135deg,rgba(96,165,250,.14),var(--card));border:1px solid rgba(96,165,250,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">💪</div><div style="font-size:26px;font-weight:800;color:var(--blue)">${totalSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">SETS DONE</div></div>
-    <div style="background:linear-gradient(135deg,rgba(52,211,153,.14),var(--card));border:1px solid rgba(52,211,153,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">✅</div><div style="font-size:26px;font-weight:800;color:var(--green)">${doneDays}/7</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">DAYS DONE</div></div>
-    <div style="background:linear-gradient(135deg,rgba(245,158,11,.14),var(--card));border:1px solid rgba(245,158,11,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">🎯</div><div style="font-size:26px;font-weight:800;color:var(--accent)">${postureSets}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">POSTURE SETS</div></div>
-    <div style="background:linear-gradient(135deg,rgba(249,115,22,.16),rgba(245,158,11,.08));border:1px solid rgba(249,115,22,.28);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">🔥</div><div style="font-size:26px;font-weight:800;color:var(--orange)">${wc}</div><div style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.06em;margin-top:2px">KCAL BURNED</div></div>
+    <div style="background:linear-gradient(135deg,rgba(56,189,248,.14),var(--card));border:1px solid rgba(56,189,248,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">⚔️</div><div class="sysfont" style="font-size:26px;font-weight:700;color:var(--blue)">${player.totalSets}</div><div class="sysfont" style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.1em;margin-top:2px">SETS CLEARED</div></div>
+    <div style="background:linear-gradient(135deg,rgba(0,229,176,.14),var(--card));border:1px solid rgba(0,229,176,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">🌀</div><div class="sysfont" style="font-size:26px;font-weight:700;color:var(--green)">${player.gates}</div><div class="sysfont" style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.1em;margin-top:2px">GATES CLEARED</div></div>
+    <div style="background:linear-gradient(135deg,rgba(168,85,247,.14),var(--card));border:1px solid rgba(168,85,247,.22);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">🛡️</div><div class="sysfont" style="font-size:26px;font-weight:700;color:var(--purple)">${player.posture}</div><div class="sysfont" style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.1em;margin-top:2px">DISCIPLINE</div></div>
+    <div style="background:linear-gradient(135deg,rgba(43,212,255,.16),rgba(43,212,255,.04));border:1px solid rgba(43,212,255,.28);border-radius:18px;padding:16px 12px;text-align:center"><div style="font-size:24px;margin-bottom:4px">⚡</div><div class="sysfont" style="font-size:26px;font-weight:700;color:var(--accent)">${player.exp}</div><div class="sysfont" style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.1em;margin-top:2px">LIFETIME EXP</div></div>
   </div>`;
-  h+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY BREAKDOWN</div>`;
+  h+=`<div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:12px;position:relative">${corners()}<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em">▣ THIS WEEK · GATES</div><div class="sysfont" style="font-size:9px;color:var(--muted);letter-spacing:.1em">RESETS MON</div></div>`;
   DAYS.forEach(d=>{const m=TYPE[d.type],{pct}=getDayProg(d.id),calDone=getCalBurned(d.id),calMax=getMaxCal(d.id);
-    h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
-    <div style="flex:1"><div style="height:5px;border-radius:99px;background:var(--faint);overflow:hidden;margin-bottom:3px"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div><div style="font-size:10px;color:var(--muted)">${calDone?"🔥 "+calDone+" / "+calMax+" kcal":"no sets logged yet"}</div></div>
-    <div style="font-size:11px;font-weight:700;color:${pct>0?m.color:"var(--faint)"};width:28px;text-align:right">${pct}%</div></div>`;});
-  h+=`</div><div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:12px">DAILY MACRO TARGETS</div>`;
+    h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="width:26px;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div><div class="sysfont" style="font-size:10px;color:${m.color};width:46px;font-weight:700;flex-shrink:0">${d.label}</div>
+    <div style="flex:1"><div style="height:5px;border-radius:99px;background:var(--faint);overflow:hidden;margin-bottom:3px"><div style="height:100%;width:${pct}%;background:${m.color};border-radius:99px"></div></div><div style="font-size:10px;color:var(--muted)">${calDone?"⚡ "+calDone*EXP_MULT+" / "+calMax*EXP_MULT+" EXP":"gate not entered"}</div></div>
+    <div class="sysfont" style="font-size:11px;font-weight:700;color:${pct>0?m.color:"var(--faint)"};width:28px;text-align:right">${pct}%</div></div>`;});
+  h+=`</div>`;
+  // ── Raid Log: dated history of training days ──
+  h+=`<div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:12px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:12px">▣ RAID LOG</div>`;
+  if(!player.log.length){h+=`<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0">No raids logged yet. Clear objectives to begin your record.</div>`;}
+  else{player.log.slice(0,14).forEach(e=>{
+    h+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--faint)">
+      <div class="sysfont" style="font-size:12px;color:var(--text);font-weight:600;width:96px;flex-shrink:0">${fmtDate(e.date)}</div>
+      <div style="flex:1;min-width:0;display:flex;gap:4px;flex-wrap:wrap">${e.gates.length?e.gates.map(g=>`<span class="sysfont" style="font-size:9px;background:rgba(43,212,255,.12);color:var(--accent);padding:2px 7px;border-radius:20px;font-weight:700">${g}</span>`).join(""):`<span style="font-size:11px;color:var(--muted)">training logged</span>`}</div>
+      <div class="sysfont" style="font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0">⚡ ${e.exp}</div>
+    </div>`;});}
+  h+=`</div><div class="sys-panel" style="border-radius:18px;padding:16px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:12px">▣ NUTRITION PROTOCOL</div>`;
   [{l:"Calories",v:"2,600 kcal",c:"var(--accent)"},{l:"Protein",v:"140 g · 2.19 g/kg",c:"var(--blue)"},{l:"Carbs",v:"348 g",c:"var(--green)"},{l:"Fat",v:"72 g",c:"var(--purple)"}].forEach(m=>{h+=`<div class="info-row"><span style="font-size:13px;color:var(--muted)">${m.l}</span><span style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</span></div>`;});
   return h+`<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Last meal by 7:30 PM · No food 3h before sleep</div></div></div>`;}
 
 function renderCoach(){
   const day=DAYS[selectedDay];
-  const chips=["Form tips for today","Can't do pull-ups — what's the sub?","Pre-workout snack (no citrus)","I'm sore — should I still train?","Best APT drill for today","Quick high-protein meal idea"];
+  const chips=["Analyze today's gate","Can't do pull-ups — give me a substitute","Pre-quest fuel (no citrus)","I'm fatigued — should I still raid?","Best posture drill for today","High-protein meal to recover HP"];
   let h=`<div style="padding:0 16px">
-    <div style="background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(167,139,250,.06));border:1px solid rgba(167,139,250,.28);border-radius:20px;padding:16px;margin-bottom:14px;display:flex;gap:14px;align-items:center;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-16px;right:-16px;width:80px;height:80px;border-radius:50%;background:rgba(167,139,250,.06);pointer-events:none"></div>
-      <div style="width:44px;height:44px;border-radius:14px;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🤖</div>
+    <div class="sys-panel" style="border-color:rgba(168,85,247,.4)!important;background:linear-gradient(135deg,rgba(168,85,247,.14),rgba(168,85,247,.03))!important;box-shadow:0 0 0 1px rgba(168,85,247,.1) inset,0 0 26px rgba(168,85,247,.14)!important;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;gap:14px;align-items:center;position:relative;overflow:hidden">
+      <span class="cbr tl" style="border-color:var(--purple)"></span><span class="cbr tr" style="border-color:var(--purple)"></span><span class="cbr bl" style="border-color:var(--purple)"></span><span class="cbr br" style="border-color:var(--purple)"></span>
+      <div class="sysfont" style="width:46px;height:46px;border-radius:14px;background:rgba(168,85,247,.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;color:var(--purple);box-shadow:0 0 16px rgba(168,85,247,.4),0 0 0 1px rgba(168,85,247,.4) inset">◈</div>
       <div>
-        <div style="font-size:17px;font-weight:800;letter-spacing:-.2px">AI Coach</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:3px">Powered by Claude · ${day.label}</div>
+        <div class="sysfont" style="font-size:18px;font-weight:700;letter-spacing:.05em;text-shadow:0 0 14px rgba(168,85,247,.4)">THE SYSTEM</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">Your Shadow · ${day.label}</div>
       </div>
     </div>
     <div style="margin-bottom:14px">
-      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;margin-bottom:8px">QUICK ASKS</div>
+      <div class="sysfont" style="font-size:11px;color:var(--purple);font-weight:700;letter-spacing:.16em;margin-bottom:8px">▣ SYSTEM QUERIES</div>
       <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none">
         ${chips.map(c=>`<button data-msg="${c}" onclick="sendChat(this.dataset.msg)" style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:var(--card);color:var(--muted);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s">${c}</button>`).join("")}
       </div>
     </div>`;
 
   if(chatMsgs.length===0){
-    h+=`<div style="text-align:center;padding:44px 20px;color:var(--muted)"><div style="font-size:40px;margin-bottom:12px">💬</div><div style="font-size:15px;font-weight:700;color:var(--text)">Ask your AI coach anything</div><div style="font-size:12px;margin-top:8px;line-height:1.7;color:var(--muted)">Form cues · Exercise subs · Nutrition<br>Recovery · Posture · Meal ideas</div></div>`;
+    h+=`<div style="text-align:center;padding:44px 20px;color:var(--muted)"><div style="font-size:40px;margin-bottom:12px;color:var(--purple);text-shadow:0 0 18px rgba(168,85,247,.5)">◈</div><div class="sysfont" style="font-size:16px;font-weight:700;color:var(--text);letter-spacing:.04em">THE SYSTEM AWAITS YOUR QUERY</div><div style="font-size:12px;margin-top:8px;line-height:1.7;color:var(--muted)">Form cues · Quest subs · Nutrition<br>Recovery · Posture · Meal ideas</div></div>`;
   } else {
     h+=`<div style="margin-bottom:14px">`;
     chatMsgs.forEach(m=>{
       const isUser=m.role==="user";
       h+=`<div style="display:flex;${isUser?"justify-content:flex-end":"justify-content:flex-start"};margin-bottom:12px;gap:8px;align-items:flex-end">
-        ${!isUser?`<div style="width:28px;height:28px;border-radius:50%;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;margin-bottom:2px">🤖</div>`:""}
-        <div style="max-width:80%;background:${isUser?"rgba(245,158,11,.18)":"var(--card)"};border:1px solid ${isUser?"rgba(245,158,11,.3)":"var(--border)"};border-radius:${isUser?"16px 4px 16px 16px":"4px 16px 16px 16px"};padding:11px 14px;font-size:13px;color:var(--text);line-height:1.65">${m.content.replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>")}</div>
-        ${isUser?`<div style="width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;margin-bottom:2px">🏋️</div>`:""}
+        ${!isUser?`<div class="sysfont" style="width:28px;height:28px;border-radius:50%;background:rgba(168,85,247,.2);color:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;margin-bottom:2px">◈</div>`:""}
+        <div style="max-width:80%;background:${isUser?"rgba(43,212,255,.16)":"var(--card)"};border:1px solid ${isUser?"rgba(43,212,255,.3)":"var(--border)"};border-radius:${isUser?"16px 4px 16px 16px":"4px 16px 16px 16px"};padding:11px 14px;font-size:13px;color:var(--text);line-height:1.65">${m.content.replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>")}</div>
+        ${isUser?`<div style="width:28px;height:28px;border-radius:50%;background:rgba(43,212,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;margin-bottom:2px">⚔️</div>`:""}
       </div>`;
     });
     if(chatBusy){
       h+=`<div style="display:flex;justify-content:flex-start;gap:8px;align-items:flex-end;margin-bottom:12px">
-        <div style="width:28px;height:28px;border-radius:50%;background:rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px">🤖</div>
+        <div class="sysfont" style="width:28px;height:28px;border-radius:50%;background:rgba(168,85,247,.2);color:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px">◈</div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:14px 16px;display:flex;gap:5px;align-items:center">
           <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
         </div>
       </div>`;
     }
-    h+=`</div><button onclick="clearChat()" style="width:100%;padding:9px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:12px">Clear conversation</button>`;
+    h+=`</div><button onclick="clearChat()" class="sysfont" style="width:100%;padding:9px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;letter-spacing:.08em;cursor:pointer;margin-bottom:12px">⟲ RESET LOG</button>`;
   }
   h+=`<div style="display:flex;gap:8px">
-    <input id="ci" type="text" placeholder="Ask your coach..." onkeypress="if(event.key==='Enter')sendChatInput()" style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;-webkit-appearance:none" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'">
+    <input id="ci" type="text" placeholder="Query the System..." onkeypress="if(event.key==='Enter')sendChatInput()" style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;-webkit-appearance:none" onfocus="this.style.borderColor='var(--purple)'" onblur="this.style.borderColor='var(--border)'">
     <button onclick="sendChatInput()" ${chatBusy?"disabled":""} style="width:46px;height:46px;border-radius:12px;border:none;background:${chatBusy?"var(--faint)":"var(--purple)"};color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;transition:background .2s">↑</button>
   </div></div>`;
   return h;
@@ -460,10 +639,22 @@ function render(){
   badge.style.cssText=`background:${meta.color}18;border:1px solid ${meta.color}3A;border-radius:16px;padding:8px 14px;text-align:center`;
   badge.innerHTML=`<div style="font-size:20px;line-height:1">${meta.emoji}</div><div style="font-size:9px;color:${meta.color};font-weight:700;margin-top:3px;letter-spacing:.06em">${day.day.toUpperCase()}</div>`;
 
+  const lv=getLevelInfo(getTotalEXP()),rk=getRank(lv.level),hud=document.getElementById("playerHud");
+  if(hud)hud.innerHTML=`<div class="sys-panel" style="border-radius:14px;padding:10px 12px;position:relative;display:flex;align-items:center;gap:11px">${corners()}
+    <span class="rank-badge" style="color:${rk.color}">${rk.name}</span>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px">
+        <span class="sysfont" style="font-size:13px;font-weight:700;letter-spacing:.08em">LV ${lv.level} · ${rankTitle(rk.name).toUpperCase()}</span>
+        <span class="sysfont" style="font-size:10px;color:var(--accent)">⚡ ${lv.curXP}/${lv.needXP}</span>
+      </div>
+      <div class="exp-track"><div class="exp-fill" style="width:${lv.pct}%"></div></div>
+    </div>
+  </div>`;
+
   document.getElementById("dayStrip").innerHTML=DAYS.map(d=>{
     const m=TYPE[d.type],isSel=d.id===selectedDay,isTdy=d.id===todayIdx;
-    return`<button class="day-btn" onclick="selectDay(${d.id})" style="border-color:${isSel?m.color:isTdy?m.color+"44":"var(--border)"};background:${isSel?m.color+"22":"transparent"}">
-      <div style="font-size:10px;font-weight:700;color:${isSel?m.color:isTdy?m.color:"var(--muted)"}">${d.day}</div>
+    return`<button class="day-btn" onclick="selectDay(${d.id})" style="border-color:${isSel?m.color:isTdy?m.color+"44":"var(--border)"};background:${isSel?m.color+"22":"transparent"}${isSel?";box-shadow:0 0 14px "+m.color+"33":""}">
+      <div class="sysfont" style="font-size:11px;font-weight:700;letter-spacing:.04em;color:${isSel?m.color:isTdy?m.color:"var(--muted)"}">${d.day}</div>
       <div style="font-size:8px;color:${isSel?m.color:"var(--faint)"};margin-top:2px;font-weight:600">${d.label}</div>
     </button>`;}).join("");
 
@@ -475,12 +666,12 @@ function render(){
   else if(activeTab==="stats")mc.innerHTML=renderStats();
   else mc.innerHTML=renderCoach();
 
-  const tabs=[{id:"today",label:"Today",icon:"💪"},{id:"week",label:"Week",icon:"📅"},{id:"stats",label:"Stats",icon:"📊"},{id:"coach",label:"Coach",icon:"🤖"}];
+  const tabs=[{id:"today",label:"QUEST",icon:"⚔️"},{id:"week",label:"GATES",icon:"🌀"},{id:"stats",label:"STATUS",icon:"👤"},{id:"coach",label:"SYSTEM",icon:"◈"}];
   document.getElementById("bottomNav").innerHTML=tabs.map(t=>{
-    const isA=activeTab===t.id,col=t.id==="coach"?"var(--purple)":"var(--accent)",bg=t.id==="coach"?"rgba(167,139,250,.13)":"rgba(245,158,11,.1)";
-    return`<button class="nav-btn" onclick="setTab('${t.id}')" style="${isA?`background:${bg}`:""}">
-      <span style="font-size:20px">${t.icon}</span>
-      <span style="font-size:9px;font-weight:${isA?700:500};color:${isA?col:"var(--muted)"};letter-spacing:.04em">${t.label}</span>
+    const isA=activeTab===t.id,col=t.id==="coach"?"var(--purple)":"var(--accent)",bg=t.id==="coach"?"rgba(168,85,247,.14)":"rgba(43,212,255,.12)";
+    return`<button class="nav-btn" onclick="setTab('${t.id}')" style="${isA?`background:${bg};box-shadow:0 0 16px ${t.id==="coach"?"rgba(168,85,247,.22)":"rgba(43,212,255,.2)"} inset`:""}">
+      <span style="font-size:20px;color:${isA?col:"var(--muted)"}">${t.icon}</span>
+      <span class="sysfont" style="font-size:9px;font-weight:${isA?700:600};color:${isA?col:"var(--muted)"};letter-spacing:.12em">${t.label}</span>
     </button>`;
   }).join("");
 }
