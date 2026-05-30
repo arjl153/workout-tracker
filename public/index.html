@@ -497,8 +497,8 @@ function renderExList(dayId,exercises,dp,color){
     </div>
   </div>
   <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
-    <a href="${ytHref(ex.yt)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation()" style="width:34px;height:34px;border-radius:10px;background:#FF0000;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0">
-      <svg width="14" height="10" viewBox="0 0 14 10" fill="white"><path d="M13.7 1.56A1.76 1.76 0 0 0 12.46.31C11.37 0 7 0 7 0S2.63 0 1.54.31A1.76 1.76 0 0 0 .3 1.56 18.41 18.41 0 0 0 0 5a18.41 18.41 0 0 0 .3 3.44A1.76 1.76 0 0 0 1.54 9.7C2.63 10 7 10 7 10s4.37 0 5.46-.3a1.76 1.76 0 0 0 1.24-1.26A18.41 18.41 0 0 0 14 5a18.41 18.41 0 0 0-.3-3.44zM5.6 7.14V2.86L9.24 5z"/></svg>
+    <a href="${ytHref(ex.yt)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation()" title="Watch form tutorial" style="width:34px;height:34px;border-radius:10px;background:rgba(43,212,255,.07);border:1px solid var(--border2);box-shadow:0 0 10px rgba(43,212,255,.08) inset;color:var(--accent);display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
     </a>
     ${ex.isCustom?`<button onclick="event.stopPropagation();delCustomEx(${dayId},'${ex.id}')" style="width:28px;height:28px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.1);color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;line-height:1">×</button>`:""}
     <span class="chevron${open?" open":""}">▾</span>
