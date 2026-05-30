@@ -67,7 +67,7 @@ button:active{opacity:.85}
 .cbr.tr{top:-1px;right:-1px;border-left:none;border-bottom:none;border-radius:0 7px 0 0}
 .cbr.bl{bottom:-1px;left:-1px;border-right:none;border-top:none;border-radius:0 0 0 7px}
 .cbr.br{bottom:-1px;right:-1px;border-left:none;border-top:none;border-radius:0 0 7px 0}
-.rank-badge{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;min-width:28px;height:28px;padding:0 5px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1.5px solid currentColor;box-shadow:0 0 11px -2px currentColor;letter-spacing:.02em}
+.rank-badge{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;line-height:1;min-width:26px;height:26px;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;border:1.5px solid currentColor;box-shadow:0 0 12px -3px currentColor,inset 0 0 0 1px rgba(43,212,255,.05);letter-spacing:0;flex-shrink:0;text-align:center}
 .exp-track{height:7px;border-radius:99px;background:rgba(43,212,255,.1);overflow:hidden;border:1px solid rgba(43,212,255,.18)}
 .exp-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d8fff,var(--accent));box-shadow:0 0 10px rgba(43,212,255,.6);transition:width .5s cubic-bezier(.4,0,.2,1)}
 #sysToasts{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:300;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 12px 0;pointer-events:none}
@@ -241,10 +241,47 @@ function seedFromCurrent(p){
   if(live>0){const t=todayStr();p.lastTrainDate=t;p.streak=1;p.bestStreak=1;p.log=[{date:t,exp:live,gates:[]}];}
 }
 let player=JSON.parse(localStorage.getItem("wt_player")||"null");
-if(!player){player=blankPlayer();seedFromCurrent(player);}
+if(!player){player=blankPlayer();seedFromCurrent(player);saveStats();}
 
 function saveStats(){localStorage.setItem("wt_player",JSON.stringify(player));}
-function saveLS(){localStorage.setItem("wt_progress",JSON.stringify(progressData));localStorage.setItem("wt_custom",JSON.stringify(customExercises));saveStats();}
+function saveLS(){localStorage.setItem("wt_progress",JSON.stringify(progressData));localStorage.setItem("wt_custom",JSON.stringify(customExercises));saveStats();localTs=Date.now();localStorage.setItem("wt_ts",String(localTs));schedulePush();}
+
+// ─── Cloud sync (single secret sync code → one save blob in Upstash Redis) ─────
+let syncCode=localStorage.getItem("wt_synccode")||"";
+let localTs=+(localStorage.getItem("wt_ts")||0);
+let syncMsg="",_pushTimer=null;
+function buildSave(){return{progress:progressData,custom:customExercises,player,ts:localTs};}
+function renderIfStats(){if(activeTab==="stats")render();}
+function setSyncCode(){const v=(document.getElementById("syncCodeInput")?.value||"").trim();syncCode=v;localStorage.setItem("wt_synccode",v);syncMsg=v?"Sync code set — Save/Load now available.":"Sync code cleared.";render();if(v)cloudPull(true);}
+function schedulePush(){if(!syncCode)return;clearTimeout(_pushTimer);_pushTimer=setTimeout(()=>cloudPush(false),1500);}
+async function cloudPush(manual){
+  if(!syncCode){if(manual){syncMsg="Enter a sync code first.";renderIfStats();}return;}
+  try{if(manual){syncMsg="Saving to cloud…";renderIfStats();}
+    const r=await fetch("/api/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:syncCode,action:"push",save:buildSave()})});
+    const d=await r.json();
+    syncMsg=d.error==="sync_not_configured"?"Cloud sync isn't set up on the server yet.":d.ok?"✓ Synced "+new Date().toLocaleTimeString():"Sync failed: "+(d.error||"error");
+  }catch(e){syncMsg="Sync error — offline?";}
+  renderIfStats();
+}
+async function cloudPull(manual){
+  if(!syncCode){if(manual){syncMsg="Enter a sync code first.";renderIfStats();}return;}
+  try{if(manual){syncMsg="Loading from cloud…";renderIfStats();}
+    const r=await fetch("/api/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:syncCode,action:"pull"})});
+    const d=await r.json();
+    if(d.error==="sync_not_configured"){syncMsg="Cloud sync isn't set up on the server yet.";renderIfStats();return;}
+    if(d.ok&&d.save){const s=d.save;
+      if(manual||(s.ts||0)>localTs){
+        progressData=s.progress||{};customExercises=s.custom||{};if(s.player)player=s.player;
+        localTs=s.ts||Date.now();localStorage.setItem("wt_ts",String(localTs));
+        localStorage.setItem("wt_progress",JSON.stringify(progressData));localStorage.setItem("wt_custom",JSON.stringify(customExercises));saveStats();
+        syncMsg="✓ Loaded cloud save"+(s.ts?" · "+new Date(s.ts).toLocaleString():"");render();return;
+      }
+      syncMsg="Local copy is already up to date.";
+    }else if(d.ok){syncMsg="No cloud save yet — hit Save to create one.";}
+    else{syncMsg="Pull failed: "+(d.error||"error");}
+  }catch(e){syncMsg="Sync error — offline?";}
+  renderIfStats();
+}
 
 // Weekly "gate respawn": a new week clears the checklist (logged weights kept); lifetime stats persist
 function initWeek(){
@@ -282,6 +319,7 @@ function awardSet(dayId,exId,idx){
 }
 function streakLive(){return(player.lastTrainDate===todayStr()||player.lastTrainDate===yesterdayStr())?player.streak:0;}
 initWeek();
+if(syncCode)cloudPull(false); // auto-pull newest save on load
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getCalBurned(dayId){const day=DAYS[dayId];if(!day)return 0;const dp=progressData[dayId]||{};return[...day.exercises,...(customExercises[dayId]||[])].reduce((s,e)=>s+((dp[e.id]?.sets||[]).filter(Boolean).length)*(e.cal||7),0)}
@@ -580,7 +618,19 @@ function renderStats(){
       <div style="flex:1;min-width:0;display:flex;gap:4px;flex-wrap:wrap">${e.gates.length?e.gates.map(g=>`<span class="sysfont" style="font-size:9px;background:rgba(43,212,255,.12);color:var(--accent);padding:2px 7px;border-radius:20px;font-weight:700">${g}</span>`).join(""):`<span style="font-size:11px;color:var(--muted)">training logged</span>`}</div>
       <div class="sysfont" style="font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0">⚡ ${e.exp}</div>
     </div>`;});}
-  h+=`</div><div class="sys-panel" style="border-radius:18px;padding:16px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:12px">▣ NUTRITION PROTOCOL</div>`;
+  h+=`</div>`;
+  // ── Cloud Sync ──
+  h+=`<div class="sys-panel" style="border-radius:18px;padding:16px;margin-bottom:12px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:10px">▣ CLOUD SYNC</div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:10px">Pick one secret sync code and enter it on any device to carry your save. Progress auto-saves to the cloud after each change.</div>
+    <input id="syncCodeInput" type="text" autocomplete="off" inputmode="text" placeholder="your secret sync code" value="${syncCode.replace(/"/g,"&quot;")}" class="form-input" style="margin-bottom:8px">
+    <div style="display:flex;gap:8px">
+      <button onclick="setSyncCode()" class="sysfont" style="flex:1;padding:11px 4px;border-radius:12px;border:1.5px solid var(--border2);background:var(--card2);color:var(--text);font-weight:700;letter-spacing:.05em;cursor:pointer;font-size:12px">SET CODE</button>
+      <button onclick="cloudPush(true)" class="sysfont" style="flex:1;padding:11px 4px;border-radius:12px;border:none;background:linear-gradient(135deg,#1d8fff,var(--accent));color:#021018;font-weight:700;letter-spacing:.05em;cursor:pointer;font-size:12px">⬆ SAVE</button>
+      <button onclick="cloudPull(true)" class="sysfont" style="flex:1;padding:11px 4px;border-radius:12px;border:1.5px solid var(--accent);background:rgba(43,212,255,.08);color:var(--accent);font-weight:700;letter-spacing:.05em;cursor:pointer;font-size:12px">⬇ LOAD</button>
+    </div>
+    ${syncMsg?`<div class="sysfont" style="font-size:11px;color:var(--muted);margin-top:10px;letter-spacing:.03em">${syncMsg}</div>`:""}
+  </div>`;
+  h+=`<div class="sys-panel" style="border-radius:18px;padding:16px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:12px">▣ NUTRITION PROTOCOL</div>`;
   [{l:"Calories",v:"2,600 kcal",c:"var(--accent)"},{l:"Protein",v:"140 g · 2.19 g/kg",c:"var(--blue)"},{l:"Carbs",v:"348 g",c:"var(--green)"},{l:"Fat",v:"72 g",c:"var(--purple)"}].forEach(m=>{h+=`<div class="info-row"><span style="font-size:13px;color:var(--muted)">${m.l}</span><span style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</span></div>`;});
   return h+`<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Last meal by 7:30 PM · No food 3h before sleep</div></div></div>`;}
 
