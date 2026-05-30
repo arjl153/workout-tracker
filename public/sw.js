@@ -1,9 +1,9 @@
-const CACHE = 'system-v4';
+const CACHE = 'system-v5';
 
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      .then(c => c.addAll(['/', '/manifest.json', '/icon.svg']))
+      .then(c => c.addAll(['/', '/manifest.json', '/icon.svg', '/system-chime.mp3']))
       .then(() => self.skipWaiting())
   );
 });
