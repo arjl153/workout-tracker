@@ -352,9 +352,46 @@ function rankTitle(name){return({E:"Awakened",D:"Hunter",C:"Elite Hunter",B:"Ace
 function gateRank(dayId){const m=getMaxCal(dayId);return m<80?"E":m<140?"D":m<190?"C":m<240?"B":"A";}
 function findEx(dayId,exId){return[...(DAYS[dayId]?.exercises||[]),...(customExercises[dayId]||[])].find(e=>e.id===exId);}
 
+// ─── System chime (Web Audio — crystalline "System" notification ping) ─────────
+let audioCtx=null,soundOn=localStorage.getItem("wt_sound")!=="off";
+function ensureAudio(){
+  try{ if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx=null; }
+  if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();
+  return audioCtx;
+}
+// One bell-like note built from a fundamental + bright harmonics with a fast attack and shimmering decay
+function ding(ctx,dest,freq,at,dur,peak){
+  [[1,1,"sine"],[2,0.4,"sine"],[3,0.13,"triangle"]].forEach(p=>{
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type=p[2];o.frequency.setValueAtTime(freq*p[0],at);
+    g.gain.setValueAtTime(0,at);
+    g.gain.linearRampToValueAtTime(peak*p[1],at+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,at+dur);
+    o.connect(g);g.connect(dest);o.start(at);o.stop(at+dur+0.05);
+  });
+}
+function playChime(kind){
+  if(!soundOn)return;const ctx=ensureAudio();if(!ctx)return;
+  const t=ctx.currentTime+0.01;
+  const master=ctx.createGain(),lp=ctx.createBiquadFilter();
+  lp.type="lowpass";lp.frequency.value=7600;master.connect(lp);lp.connect(ctx.destination);
+  if(kind==="lvl"){ // triumphant ascending arpeggio + sparkle for level/rank up
+    master.gain.value=0.16;
+    [880,1108.73,1318.51,1760].forEach((f,i)=>ding(ctx,master,f,t+i*0.11,1.45-i*0.12,0.9));
+    ding(ctx,master,2637.02,t+0.34,1.7,0.42);
+  }else{ // light two-note crystalline ping for quest / gate / streak
+    master.gain.value=0.14;
+    ding(ctx,master,1318.51,t,0.55,0.9);       // E6
+    ding(ctx,master,1975.53,t+0.085,0.85,0.7); // B6
+    ding(ctx,master,2637.02,t+0.085,0.95,0.22);// shimmer
+  }
+}
+function toggleSound(){soundOn=!soundOn;localStorage.setItem("wt_sound",soundOn?"on":"off");if(soundOn)playChime();render();}
+
 // ─── System Notifications ─────────────────────────────────────────────────────
 function notify(tag,title,body,kind){
   const wrap=document.getElementById("sysToasts");if(!wrap)return;
+  playChime(kind);
   const el=document.createElement("div");
   el.className="sys-toast"+(kind==="lvl"?" lvl":"");
   el.innerHTML=corners()+`<div class="st-tag">▣ ${tag}</div><div class="st-title">${title}</div>`+(body?`<div class="st-body">${body}</div>`:"");
@@ -632,7 +669,9 @@ function renderStats(){
   </div>`;
   h+=`<div class="sys-panel" style="border-radius:18px;padding:16px;position:relative">${corners()}<div class="sysfont" style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.16em;margin-bottom:12px">▣ NUTRITION PROTOCOL</div>`;
   [{l:"Calories",v:"2,600 kcal",c:"var(--accent)"},{l:"Protein",v:"140 g · 2.19 g/kg",c:"var(--blue)"},{l:"Carbs",v:"348 g",c:"var(--green)"},{l:"Fat",v:"72 g",c:"var(--purple)"}].forEach(m=>{h+=`<div class="info-row"><span style="font-size:13px;color:var(--muted)">${m.l}</span><span style="font-size:13px;font-weight:700;color:${m.c}">${m.v}</span></div>`;});
-  return h+`<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Last meal by 7:30 PM · No food 3h before sleep</div></div></div>`;}
+  h+=`<div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">Last meal by 7:30 PM · No food 3h before sleep</div></div>`;
+  h+=`<button onclick="toggleSound()" class="sysfont" style="width:100%;margin-top:12px;padding:12px;border-radius:14px;border:1px solid ${soundOn?"var(--border2)":"var(--border)"};background:var(--card2);color:${soundOn?"var(--accent)":"var(--muted)"};font-weight:700;letter-spacing:.1em;cursor:pointer;font-size:12px">${soundOn?"🔊 SYSTEM SOUND · ON":"🔇 SYSTEM SOUND · OFF"}</button>`;
+  return h+`</div>`;}
 
 function renderCoach(){
   const day=DAYS[selectedDay];
